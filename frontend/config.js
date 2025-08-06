@@ -1,4 +1,4 @@
 // config.js
 window.env = {
-  API_URL: 'http://localhost:3000',
+  API_URL: 'https://note-d735.onrender.com',
 };
