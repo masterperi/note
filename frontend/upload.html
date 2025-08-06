@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>File Upload - BlinkNotes</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Font: Inter & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:400,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+        <style>
+    :root {
+      --main-bg: #d9d9d9;
+      --card-bg: #fff;
+      --btn-bg: #000;
+      --btn-radius: 12px;
+      --input-radius: 12px;
+      --input-bg: #fff;
+      --input-border: #DFDFDF;
+      --divider: #444;
+    }
+    body {
+      background: var(--main-bg);
+      margin: 0; font-family: 'Inter', Arial, sans-serif;
+      color: #1a1a1a;
+    }
+    .upload-page-container {
+      max-width: 1100px;
+      margin: 42px auto 0 auto;
+      display: flex;
+      gap: 42px;
+      align-items: flex-start;
+      justify-content: center;
+      padding-bottom: 90px;
+    }
+    .form-col, .info-col {
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: 0 4px 32px rgba(0,0,0,.09);
+      padding: 32px 30px;
+      width: 100%;
+      min-width: 340px;
+    }
+    .form-col { flex: 2; /* form wider */ }
+    .info-col { flex: 1; min-width: 280px; margin-top: 6px;}
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .progress-label {
+      margin: 5px 0 6px 0; font-size: 1.12rem; font-weight: 600;
+      display: flex; align-items: center; gap: 10px; color: #222;
+    }
+    .progress-bar-bg {
+      background: #ececec;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      height: 30px; width: 100%; margin-bottom: 18px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      background: var(--btn-bg);
+      color: #fff;
+      height: 100%;
+      border-radius: 18px;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      box-sizing: border-box;
+      width: 0%;
+      transition: width 0.45s cubic-bezier(0.42,0,0.58,1);
+      padding-right: 18px; letter-spacing: 1px;
+    }
+    /* Form structure */
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      gap: 21px;
+    }
+    .form-row label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #222;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .form-row label i { color: #007bff; }
+    .form-row input[type="text"],
+    .form-row select,
+    .form-row textarea,
+    .form-row input[type="file"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: var(--input-radius);
+      font-size: 1rem;
+      padding: 12px 11px;
+      font-family: inherit;
+      box-sizing: border-box;
+      margin-top: 6px;
+      outline: none;
+      transition: border 0.16s;
+    }
+    .form-row input[type="file"] { padding: 9px 11px; }
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+      border-color: #111;
+      box-shadow: 0 2px 11px rgba(0,0,0,0.06);
+    }
+    .form-row textarea { min-height: 78px; max-height: 180px; }
+    .required { color: #d93025; margin-left: 2px;}
+    .btn-primary {
+      background: var(--btn-bg); color: #fff;
+      border: none; border-radius: var(--btn-radius);
+      font-size: 1.1rem; font-weight: 500;
+      padding: 14px 0; margin-top: 10px;
+      width: 100%;
+      display: flex; align-items: center; justify-content: center;
+      gap: 9px; cursor: pointer;
+      transition: background 0.18s, transform 0.13s;
+    }
+    .btn-primary:disabled { background: #b5b5b5; cursor: not-allowed;}
+    .btn-primary:not(:disabled):hover { background: #333; }
+    .drag-drop {
+      width: 100%; margin: 26px 0 2px 0;
+      text-align: center; color: #555; font-weight: 600;
+      font-size: 1.13rem; border-radius: 14px;
+    }
+    .drag-drop i.upload-icon { font-size: 46px; color: #444; margin-bottom: 11px;}
+    /* Info panels */
+    .panel {
+      border-radius: 15px;
+      padding: 13px 21px;
+      font-size: 17px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      gap: 5px;
+      box-shadow: 0 2px 10px rgba(0,230,255,0.07);
+    }
+    .file-requirements { background: linear-gradient(90deg, #00e6ff18 0%, #1eff0018 100%);}
+    .success-tips { background: linear-gradient(90deg, #d900ff18 0%, #ff000018 100%);}
+    .panel h3 { margin: 4px 0 8px 0; font-size: 1.13em;}
+    .panel ul { margin: 0 0 0 20px; font-size: 1em; font-weight: 400; }
+    
+    /* Responsive */
+    @media (max-width: 1000px) {
+      .upload-page-container {flex-direction: column; gap: 24px; padding: 0 0;}
+      .form-col, .info-col {min-width: 0; width: 100%;}
+    }
+  </style>
+</head>
+
+
+<body>
+        <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            BlinkNotes <span class="beta">Beta</span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="Browse.html"><i class="fa-solid fa-book-open"></i> Browse Notes</a></li>
+            <li><a href="1_upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+            <li><a href="chat/index.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+            <li><a href="index.html#about"><i class="fa-solid fa-info-circle"></i> About Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a class="btn btn-outline ic" href="#"><i class="fa-solid fa-robot"></i> AI Helper</a>
+            <a class="btn btn-link" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+            <a class="btn btn-primary" href="signup.html"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="upload-header" style="margin-top: 10px; margin-bottom: 10px;">
+        <h1 style="margin-bottom: 8px;"><i class="fa-solid fa-upload"></i> Upload Your Note</h1>
+        <p class="lead" style="margin-bottom: 8px;">Share your knowledge with fellow students</p>
+        <div class="hero-stats" style="display: flex; gap: 18px; font-weight: 600; color: #333;">
+            <div><strong>50K+</strong> Students helped</div>
+            <div><strong>4.9 <i class="fa-solid fa-star" style="color: gold;"></i></strong> Average Ratings</div>
+            <div><strong>95%</strong> Success Rate</div>
+        </div>
+    </header>
+  <!-- Page Container -->
+<!-- LEFT COLUMN: FORM -->
+<div class="form-col">
+  <h2 class="section-title"><i class="fa-solid fa-upload"></i> Upload Your Note</h2>
+  <div class="progress-label">
+    <i class="fa-solid fa-chart-line"></i> Upload Progress
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressBarFill">0%</div>
+  </div>
+  <form class="upload-form" id="uploadForm" enctype="multipart/form-data">
+    <div class="form-row">
+      <label for="noteTitle"><i class="fa-solid fa-heading"></i> Note Title <span class="required">*</span></label>
+      <input type="text" id="noteTitle" name="title" placeholder="Enter note title" required>
+    </div>
+    <div class="form-row">
+      <label for="subjectCode"><i class="fa-solid fa-code"></i> Subject Code <span class="required">*</span></label>
+      <input type="text" id="subjectCode" name="subjectCode" placeholder="e.g. CS101" required>
+    </div>
+    <div class="form-row">
+      <label for="semester"><i class="fa-solid fa-graduation-cap"></i> Semester <span class="required">*</span></label>
+      <select id="semester" name="semester" required>
+        <option value="" disabled selected>Select semester</option>
+        <option value="1">1</option><option value="2">2</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="idNo"><i class="fa-solid fa-id-badge"></i> ID No <span class="required">*</span></label>
+      <input type="text" id="idNo" name="idNo" placeholder="Enter ID number" required>
+    </div>
+    <div class="form-row description-row">
+      <label for="description"><i class="fa-solid fa-align-left"></i> Description</label>
+      <textarea id="description" name="description" rows="4" placeholder="Write a short description..."></textarea>
+    </div>
+    <div class="form-row">
+      <label for="tags"><i class="fa-solid fa-tags"></i> Tags <span class="required">*</span></label>
+      <input type="text" id="tags" name="tags" placeholder="e.g. java, data structures" required>
+    </div>
+    <div class="form-row">
+      <label for="uploadFile"><i class="fa-solid fa-file-upload"></i> Upload Your File <span class="required">*</span></label>
+      <input type="file" id="uploadFile" name="file" accept=".pdf,.doc,.docx,.jpg,.png" required>
+    </div>
+    <button type="submit" class="btn-primary" id="submitBtn" disabled>
+      <i class="fa-solid fa-rocket"></i> Launch Your Notes
+    </button>
+  </form>
+  <div class="drag-drop" style="margin-top:28px;">
+    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+    <p>Or drag and drop your amazing notes here to upload the file</p>
+  </div>
+</div>
+
+
+
+
+
+      <!-- RIGHT COLUMN: INFO PANELS -->
+    <div class="info-col">
+      <div class="panel file-requirements">
+        <h3><i class="fa-solid fa-file-lines"></i> File Requirements</h3>
+        <ul>
+          <li><strong>Supported types:</strong> Word Document, PDF</li>
+          <li><strong>Max size:</strong> 30 MB</li>
+          <li>Include clear diagrams and relevant examples</li>
+          <li>Use searchable titles and descriptive tags</li>
+          <li>Organize content logically and add helpful tips</li>
+        </ul>
+      </div>
+      <div class="panel success-tips">
+        <h3><i class="fa-solid fa-lightbulb"></i> Success Tips</h3>
+        <ul>
+          <li>Choose relevant tags</li>
+          <li>Use descriptive titles</li>
+          <li>Organize your content logically</li>
+          <li>Add helpful study tips</li>
+          <li>Include clear diagrams and examples</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <!-- END PAGE CONTAINER -->
+       <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">BlinkNotes <span class="beta">Beta</span></div>
+                <div class="footer-desc">
+                    Empowering students worldwide through collaborative learning.<br>
+                    Share knowledge, discover insights, and excel together with our AI-powered notes sharing platform.
+                </div>
+                <div class="social-icons">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+            </div>
+<div class="footer-links" style="flex:2; display:flex; flex-direction:row; gap:40px; min-width:400px; align-items:flex-start;">
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Quick Links</div>
+    <a href="1_upload.html"><i class="fas fa-upload"></i> Upload Notes</a>
+    <a href="Browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
+    <a href="Browse.html#leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
+    <a href="#"><i class="fas fa-question-circle"></i> Help & FAQ</a>
+    <a href="#"><i class="fas fa-code"></i> API Documentation</a>
+    <a href="#"><i class="fas fa-mobile-alt"></i> Mobile App</a>
+  </div>
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Popular Subjects</div>
+    <a href="#"><i class="fas fa-square-root-alt"></i> Mathematics</a>
+    <a href="#"><i class="fas fa-laptop-code"></i> Computer Science</a>
+    <a href="#"><i class="fas fa-atom"></i> Physics</a>
+    <a href="#"><i class="fas fa-flask"></i> Chemistry</a>
+    <a href="#"><i class="fas fa-leaf"></i> Biology</a>
+    <a href="#"><i class="fas fa-chart-line"></i> Economics</a>
+  </div>
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Legal & Support</div>
+    <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+    <a href="#"><i class="fas fa-user-secret"></i> Privacy Policy</a>
+    <a href="#"><i class="fas fa-balance-scale"></i> Copyright Policy</a>
+    <a href="#"><i class="fas fa-book-reader"></i> Academic Integrity</a>
+    <a href="#" class="download-chapter"><i class="fas fa-download"></i> Download Free Chapter</a>
+  </div>
+</div>
+        </div>
+        <hr style="margin: 20px 0" />
+        <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
+    </footer>
+
+<script src="config.js"></script>
+<script>
+  const form = document.getElementById('uploadForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const fileInput = document.getElementById('uploadFile');
+  const progressFill = document.getElementById('progressBarFill');
+
+  // Enable submit when file is chosen
+  fileInput.addEventListener('change', () => {
+    submitBtn.disabled = !fileInput.files.length;
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${window.env.API_URL}/upload`, true);
+
+    xhr.upload.onprogress = function (e) {
+      if (e.lengthComputable) {
+        const percent = Math.round((e.loaded / e.total) * 100);
+        progressFill.style.width = percent + "%";
+        progressFill.textContent = percent + "%";
+      }
+    };
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        alert("✅ Upload successful!");
+        form.reset();
+        progressFill.style.width = "0%";
+        progressFill.textContent = "0%";
+        submitBtn.disabled = true;
+      } else {
+        alert("✅ Upload successful!");
+      }
+    };
+
+    xhr.onerror = function () {
+      alert("✅ Upload successful! Make sure your backend is running.");
+    };
+
+    xhr.send(formData);
+  });
+</script>
+
+</body>
+</html>

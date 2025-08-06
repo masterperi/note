@@ -1,0 +1,145 @@
+body {
+  background: #d9d9d9;
+  font-family: Inter, sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.chat-container {
+  width: 325px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 13px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.logo {
+  color: #000;
+  font-size: 16px;
+  font-family: Inter, sans-serif;
+  font-weight: 800;
+  flex: 1;
+}
+
+.beta-badge {
+  background: rgba(0, 0, 0, 0.64);
+  color: #fff;
+  font-size: 12px;
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  border-radius: 25px;
+  padding: 4px 12px;
+  margin-right: 8px;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: #5C5C5C;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 5px;
+  transition: background .2s;
+}
+.clear-btn:hover { background: #f2f2f2; }
+
+.chat-body {
+  flex: 1 1 0%;
+  padding: 18px 10px 10px 10px;
+  background: #d9d9d9;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  min-height: 220px;
+  max-height: 270px;
+}
+
+.bubble {
+  font-size: 13px;
+  font-family: 'IBM Plex Mono', 'Anonymous Pro', monospace, sans-serif;
+  font-weight: 400;
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 75%;
+  word-break: break-word;
+  margin: 2px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.bubble.user {
+  color: #fff;
+  background: #5C5C5C;
+  align-self: flex-end;
+  font-size: 12px;
+  border-bottom-right-radius: 5px;
+}
+.bubble.bot {
+  color: #111;
+  background: #fff;
+  align-self: flex-start;
+  font-size: 12px;
+  border-bottom-left-radius: 5px;
+}
+
+.chat-input-area {
+  background: #fff;
+  border-top: 1px solid #f2f2f2;
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 100px;
+  background: #f5f7ff;
+  font-family: 'IBM Plex Mono', 'Inter', monospace, sans-serif;
+  color: #222;
+  transition: box-shadow .2s;
+}
+
+.chat-input:focus {
+  box-shadow: 0 0 2px #9bbcff;
+}
+
+.send-btn {
+  background: #1E6EF4;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s, scale .1s;
+  box-shadow: 0 2px 8px rgba(30,110,244,0.12);
+}
+.send-btn:hover {
+  background: #004fc1;
+  scale: 1.1;
+}
+.send-btn:active {
+  background: #003887;
+  scale: 0.95;
+}

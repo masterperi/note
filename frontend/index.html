@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BlinkNotes</title>
+    <script src="config.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font: Inter & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:400,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+      <style>
+    /* ===== Your existing main page styles (summary) ===== */
+    body {
+      background: #ececec;
+      margin: 0;
+      font-family: 'Inter', 'Plus Jakarta Sans', Arial, sans-serif;
+      color: #18181b;
+      min-height: 100vh;
+    }
+    /* Navbar */
+    .navbar {
+      width: 100%;
+      background: #FFFEFE;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+      display: flex;
+      align-items: center;
+      padding: 0 3vw;
+      height: 74px;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 16px rgba(100,110,120,0.04);
+    }
+    .navbar .navbar-brand {
+      font-size: 32px;
+      font-weight: 800;
+      margin-right: 2vw;
+      display: flex;
+      align-items: center;
+    }
+    .navbar .beta {
+      background: rgba(0,0,0,0.64);
+      color: #fff;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 400;
+      padding: 2px 10px;
+      margin-left: 7px;
+    }
+    .navbar-menu {
+      display: flex;
+      gap: 32px;
+      flex: 1 1 auto;
+      list-style: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar-menu li {
+      cursor: pointer;
+      transition: color 0.18s;
+    }
+    .navbar-menu li:hover {
+      color: #1d62c5;
+    }
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 15px;
+      font-family: inherit;
+      padding: 9px 17px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: box-shadow 0.16s, background 0.16s, color 0.16s, transform 0.13s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .btn-primary {
+      background: #111;
+      color: #fff;
+      box-shadow: 0 2px 16px rgba(42,42,50,0.05);
+    }
+    .btn-primary:hover {
+      background: #1d62c5;
+      color: #fff;
+    }
+    .btn-outline {
+      background: #fff;
+      color: #111;
+      border: 1px solid #111;
+    }
+    .btn-outline:hover {
+      background: #1d62c5;
+      color: #fff;
+      border-color: #1d62c5;
+    }
+    .btn-link {
+      background: none;
+      color: #111;
+      font-weight: 700;
+      border: none;
+      padding: 8px 11px;
+    }
+    .btn-lg {
+      font-size: 20px;
+      padding: 15px 26px;
+      border-radius: 25px;
+    }
+    /* ... your other main page CSS omitted for brevity (features, footer, etc.) */
+    /* ===================================================== */
+
+    /* === Floating Chatbot Widget CSS === */
+    #chat-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: #1d62c5;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(29, 98, 197, 0.5);
+      z-index: 9999;
+      transition: background 0.17s, transform 0.13s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #chat-toggle:hover {
+      background: #084ca1;
+      transform: scale(1.11);
+    }
+    #chat-toggle:active {
+      background: #18181b;
+    }
+    #chat-popup {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 360px;
+      max-width: 97vw;
+      height: 480px;
+      max-height: 80vh;
+      background: #fff;
+      border-radius: 25px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.13);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9999;
+      font-family: 'Inter', 'Plus Jakarta Sans', Arial, sans-serif;
+    }
+    @media (max-width:450px){
+      #chat-popup { width: 92vw; height: 93vw; min-width: 230px; }
+    }
+    #chat-popup header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: #fffefe;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+      box-shadow: 0 2px 16px rgba(100,110,120,0.04);
+      font-weight: 700;
+      font-size: 20px;
+      color: #111;
+      user-select: none;
+    }
+    #chat-popup .ai-heading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #1d62c5;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .02em;
+    }
+    #chat-popup .ai-heading .fa-robot {
+      font-size: 24px;
+    }
+    #chat-popup .chat-close {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #111;
+      cursor: pointer;
+      line-height: 1;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      transition: background 0.14s, color 0.14s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #chat-popup .chat-close:hover {
+      background: #1d62c5;
+      color: #fff;
+    }
+    #chatBody {
+      flex: 1;
+      padding: 12px 16px;
+      overflow-y: auto;
+      background: #d9d9d9;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 15px;
+      scrollbar-width: thin;
+      scrollbar-color: #1d62c5 #e1e1e1;
+    }
+    #chatBody::-webkit-scrollbar {
+      width: 7px;
+    }
+    #chatBody::-webkit-scrollbar-thumb {
+      background: #1d62c5;
+      border-radius: 10px;
+    }
+    #chatBody::-webkit-scrollbar-track {
+      background: #e1e1e1;
+      border-radius: 10px;
+    }
+    .bubble {
+      max-width: 75%;
+      padding: 10px 16px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(29, 98, 197, 0.16);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      line-height: 1.45;
+      animation: fadeInUp 0.25s cubic-bezier(.36,1.39,.49,.78) both;
+      word-break: break-word;
+      white-space: pre-line;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0.2;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .bubble.bot {
+      background: #e1e9f8;
+      color: #111;
+      align-self: flex-start;
+    }
+    .bubble.user {
+      background: #1d62c5;
+      color: #fff;
+      align-self: flex-end;
+      box-shadow: 0 4px 10px rgba(29, 98, 197, 0.18);
+    }
+    .bubble .icon.bot {
+      color: #1d62c5;
+      font-size: 19px;
+    }
+    .bubble .icon.user {
+      color: #fff;
+      font-size: 19px;
+    }
+    #chatForm {
+      display: flex;
+      padding: 12px 16px;
+      border-top: 1px solid #cfcfcf;
+      background: #fff;
+      gap: 10px;
+    }
+    #chatInput {
+      flex-grow: 1;
+      padding: 10px 13px;
+      font-size: 15px;
+      border-radius: 15px;
+      border: 1.5px solid #cfcfcf;
+      outline-offset: 2px;
+      color: #18181b;
+      font-family: 'Inter', 'Plus Jakarta Sans', Arial, sans-serif;
+    }
+    #chatInput:focus {
+      border-color: #1d62c5;
+      background: #fff;
+      box-shadow: 0 0 10px #1d62c595;
+    }
+    #chatForm button[type="submit"] {
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(42,42,50,0.08);
+      font-size: 17px;
+      transition: background 0.14s, transform 0.11s;
+    }
+    #chatForm button[type="submit"]:hover {
+      background: #1d62c5;
+      transform: scale(1.08);
+    }
+    #chatForm button[type="submit"]:active {
+      background: #084ca1;
+    }
+    #chatForm svg {
+      width: 19px;
+      height: 19px;
+    }
+            #chat-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            background: #1d62c5;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(29, 98, 197, 0.5);
+            z-index: 9999;
+            transition: background 0.17s, transform 0.13s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chat-toggle:hover {
+            background: #084ca1;
+            transform: scale(1.11);
+        }
+        #chat-toggle:active {
+            background: #18181b;
+        }
+        #chat-popup {
+            position: fixed;
+            bottom: 90px;
+            right: 24px;
+            width: 360px;
+            max-width: 97vw;
+            height: 480px;
+            max-height: 80vh;
+            background: #fff;
+            border-radius: 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.13);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+            font-family: 'Inter', 'Plus Jakarta Sans', Arial, sans-serif;
+        }
+        #chat-popup.visible {
+            display: flex;
+        }
+        @media (max-width:450px) {
+            #chat-popup { width: 92vw; height: 93vw; min-width: 230px; }
+        }
+        #chat-popup header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: #fffefe;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            box-shadow: 0 2px 16px rgba(100,110,120,0.04);
+            font-weight: 700;
+            font-size: 20px;
+            color: #111;
+            user-select: none;
+        }
+        #chat-popup .ai-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1d62c5;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: .02em;
+        }
+        #chat-popup .ai-heading .fa-robot {
+            font-size: 24px;
+        }
+        #chat-popup .chat-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #111;
+            cursor: pointer;
+            line-height: 1;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            transition: background 0.14s, color 0.14s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chat-popup .chat-close:hover {
+            background: #1d62c5;
+            color: #fff;
+        }
+        #chatBody {
+            flex: 1;
+            padding: 12px 16px;
+            overflow-y: auto;
+            background: #d9d9d9;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: #1d62c5 #e1e1e1;
+        }
+        #chatBody::-webkit-scrollbar {
+            width: 7px;
+        }
+        #chatBody::-webkit-scrollbar-thumb {
+            background: #1d62c5;
+            border-radius: 10px;
+        }
+        #chatBody::-webkit-scrollbar-track {
+            background: #e1e1e1;
+            border-radius: 10px;
+        }
+        .bubble {
+            max-width: 75%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(29, 98, 197, 0.16);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            line-height: 1.45;
+            animation: fadeInUp 0.25s cubic-bezier(.36,1.39,.49,.78) both;
+            word-break: break-word;
+            white-space: pre-line;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0.2;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        .bubble.bot {
+            background: #e1e9f8;
+            color: #111;
+            align-self: flex-start;
+        }
+        .bubble.user {
+            background: #1d62c5;
+            color: #fff;
+            align-self: flex-end;
+            box-shadow: 0 4px 10px rgba(29, 98, 197, 0.18);
+        }
+        .bubble .icon.bot {
+            color: #1d62c5;
+            font-size: 19px;
+        }
+        .bubble .icon.user {
+            color: #fff;
+            font-size: 19px;
+        }
+        #chatForm {
+            display: flex;
+            padding: 12px 16px;
+            border-top: 1px solid #cfcfcf;
+            background: #fff;
+            gap: 10px;
+        }
+        #chatInput {
+            flex-grow: 1;
+            padding: 10px 13px;
+            font-size: 15px;
+            border-radius: 15px;
+            border: 1.5px solid #cfcfcf;
+            outline-offset: 2px;
+            color: #18181b;
+            font-family: 'Inter', 'Plus Jakarta Sans', Arial, sans-serif;
+        }
+        #chatInput:focus {
+            border-color: #1d62c5;
+            background: #fff;
+            box-shadow: 0 0 10px #1d62c595;
+        }
+        #chatForm button[type="submit"] {
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(42,42,50,0.08);
+            font-size: 17px;
+            transition: background 0.14s, transform 0.11s;
+        }
+        #chatForm button[type="submit"]:hover {
+            background: #1d62c5;
+            transform: scale(1.08);
+        }
+        #chatForm button[type="submit"]:active {
+            background: #084ca1;
+        }
+        #chatForm svg {
+            width: 19px;
+            height: 19px;
+        }
+  </style>
+
+      <script>
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatPopup = document.getElementById('chat-popup');
+    const chatClose = document.getElementById('chat-close');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const chatBody = document.getElementById('chatBody');
+
+    chatToggle.addEventListener('click', () => {
+      if (chatPopup.style.display === 'flex') {
+        chatPopup.style.display = 'none';
+      } else {
+        chatPopup.style.display = 'flex';
+        chatInput.focus();
+      }
+    });
+    chatClose.addEventListener('click', () => {
+      chatPopup.style.display = 'none';
+      chatToggle.focus();
+    });
+
+    function addMessage(msg, type) {
+      const div = document.createElement('article');
+      div.className = 'bubble ' + type;
+      div.setAttribute('role', 'article');
+      div.setAttribute('aria-label', type === 'bot' ? 'Bot message' : 'User message');
+      div.style.maxWidth = '75%';
+      div.style.padding = '10px 16px';
+      div.style.borderRadius = '16px';
+      div.style.display = 'flex';
+      div.style.alignItems = 'center';
+      div.style.gap = '10px';
+      div.style.boxShadow = '0 4px 12px rgba(29, 98, 197, 0.25)';
+      if (type === 'bot') {
+        div.style.backgroundColor = '#e1e9f8';
+        div.style.color = '#111';
+        div.style.alignSelf = '';
+      } else {
+        div.style.backgroundColor = '#1d62c5';
+        div.style.color = '#fff';
+        div.style.alignSelf = 'flex-end';
+        div.style.boxShadow = '0 4px 10px rgba(29, 98, 197, 0.6)';
+      }
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'icon ' + type;
+      iconSpan.style.fontSize = '18px';
+      iconSpan.style.flexShrink = 0;
+      iconSpan.style.color = (type === 'bot') ? '#1d62c5' : '#fff';
+      iconSpan.innerHTML = `<i class="fa-solid fa-${type === 'bot' ? 'robot' : 'user'}"></i>`;
+      div.appendChild(iconSpan);
+      div.appendChild(document.createTextNode(msg));
+      chatBody.appendChild(div);
+      chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+    }
+
+    async function getBotResponse(userInput) {
+      addMessage('Typing...', 'bot');
+      try {
+        const response = await fetch('http://localhost:3000/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: userInput }),
+        });
+        if (!response.ok) throw new Error('Network error');
+        const data = await response.json();
+        const typingBubble = chatBody.querySelector('.bubble.bot:last-child');
+        if (typingBubble && typingBubble.textContent === 'Typing...') {
+          typingBubble.remove();
+        }
+        addMessage(data.reply.trim(), 'bot');
+      } catch (err) {
+        const typingBubble = chatBody.querySelector('.bubble.bot:last-child');
+        if (typingBubble && typingBubble.textContent === 'Typing...') {
+          typingBubble.remove();
+        }
+        addMessage('Error: Could not connect to AI.', 'bot');
+      }
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let msg = chatInput.value.trim();
+      if (!msg) return;
+      addMessage(msg, 'user');
+      chatInput.value = '';
+      chatInput.focus();
+      await getBotResponse(msg);
+    });
+  </script>
+</head>
+<body>
+      <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            BlinkNotes <span class="beta">Beta</span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="browse.html"><i class="fa-solid fa-book-open"></i> Browse Notes</a></li>
+            <li><a href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+            <li><a href="chat.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+            <li><a href="index.html"><i class="fa-solid fa-info-circle"></i> About Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a class="btn btn-outline ic" href="chat.html"><i class="fa-solid fa-robot"></i> AI Helper</a>
+            <a class="btn btn-link" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+            <a class="btn btn-primary" href="signup.html"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+    </nav>
+<header>
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="join-badge">Join 10,000+ Students Sharing Knowledge</div>
+        <h1 class="hero-title">
+            Smart Notes Sharing Platform for <br/><span>Students</span>
+        </h1>
+        <p class="hero-desc">
+            Upload, share, and download notes from peers across all subjects.<br>
+            Enhance your learning with AI-powered features and collaborative study materials.
+        </p>
+        <div class="hero-cta">
+            <button class="btn btn-primary btn-lg">Get Started →</button>
+            <button class="btn btn-outline btn-lg">Browse Notes</button>
+        </div>
+        <div class="hero-stats">
+            <div>
+                <strong>50K+</strong>
+                <span>Notes Shared</span>
+            </div>
+            <div>
+                <strong>10K+</strong>
+                <span>Active Students</span>
+            </div>
+            <div>
+                <strong>100+</strong>
+                <span>College</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Grid -->
+    <section class="features-section">
+        <div class="section-title">Everything you need for collaborative learning</div>
+        <p class="section-desc">Our platform combines the best of social learning with cutting-edge AI technology</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon" style="background:#e0f7fa;"><i class="fa-solid fa-upload"></i></div>
+                <div class="feature-title">Upload & Share Notes</div>
+                <div class="feature-pill">Easy Upload</div>
+                <div class="feature-desc">Supports PDF, DOCX, images, and more. Easy drag-and-drop interface for seamless sharing.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:#effada;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="feature-title">Smart Search & Filters</div>
+                <div class="feature-pill">AI-Powered</div>
+                <div class="feature-desc">Find exactly what you need with advanced search, subject filters, and topic categorization.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:#fff3e0;"><i class="fa-solid fa-star"></i></div>
+                <div class="feature-title">Rate & Review System</div>
+                <div class="feature-pill">Quality First</div>
+                <div class="feature-desc">Community-driven quality control with ratings, reviews, and verified contributors.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:#f3e5f5;"><i class="fa-solid fa-comments"></i></div>
+                <div class="feature-title">AI Chatbot Assistant</div>
+                <div class="feature-pill">Gamified</div>
+                <div class="feature-desc">Get instant help, find notes, and receive study recommendations from our intelligent bot.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:#e1f5fe;"><i class="fa-solid fa-trophy"></i></div>
+                <div class="feature-title">Leaderboard & Rewards</div>
+                <div class="feature-pill">24/7 Support</div>
+                <div class="feature-desc">Earn points for contributions, climb the leaderboard, and unlock exclusive badges.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:#ede7f6;"><i class="fa-solid fa-copy"></i></div>
+                <div class="feature-title">Duplicate Detection</div>
+                <div class="feature-pill">Smart Filter</div>
+                <div class="feature-desc">AI-powered system prevents duplicate uploads and ensures unique, valuable content.</div>
+            </div>
+        </div>
+        <div class="info-stats">
+            <div><strong>1M+</strong><br>AI Interactions</div>
+            <div><strong>95%</strong><br>Quality Score</div>
+            <div><strong>24/7</strong><br>Community Active</div>
+            <div><strong>99.9%</strong><br>Uptime</div>
+        </div>
+    </section>
+
+    <!-- Subjects Cards -->
+    <section class="subjects-section">
+        <div class="section-title">Discover quality notes from your peers</div>
+        <p class="section-desc">Browse through thousands of verified notes across all subjects</p>
+        <div class="subjects-grid">
+
+            <!-- Math -->
+            <div class="subject-card">
+                <div class="subject-header math">
+                    <i class="fa-solid fa-calculator"></i> Mathematics
+                </div>
+                <div class="subject-title">Advanced Calculus</div>
+                <div class="subject-desc">
+                    Get instant help, find notes, and receive study recommendations from our intelligent bot.
+                </div>
+                <a class="subject-btn" href="#"><i class="fa-solid fa-download"></i> Download PDF</a>
+            </div>
+            <!-- Physics -->
+            <div class="subject-card">
+                <div class="subject-header physics">
+                    <i class="fa-solid fa-atom"></i> Physics
+                </div>
+                <div class="subject-title">Quantum Mechanics</div>
+                <div class="subject-desc">
+                    Explore interactive simulations and get personalized tutoring assistance tailored to your learning style.
+                </div>
+                <a class="subject-btn" href="#"><i class="fa-solid fa-download"></i> Download PDF</a>
+            </div>
+            <!-- Chemistry -->
+            <div class="subject-card">
+                <div class="subject-header chemistry">
+                    <i class="fa-solid fa-flask"></i> Chemistry
+                </div>
+                <div class="subject-title">Organic Chemistry</div>
+                <div class="subject-desc">
+                    Access detailed experiments, tutorials, and resources to enhance your comprehension of chemical principles.
+                </div>
+                <a class="subject-btn" href="#"><i class="fa-solid fa-download"></i> Download PDF</a>
+            </div>
+            <!-- Physics eBook -->
+            <div class="subject-card">
+                <div class="subject-header physics-alt">
+                    <i class="fa-solid fa-atom"></i> Physics
+                </div>
+                <div class="subject-title">Quantum Mechanics</div>
+                <div class="subject-desc">
+                    Explore interactive simulations, and get assistance with your homework and projects.
+                </div>
+                <a class="subject-btn" href="#"><i class="fa-solid fa-book-open"></i> Access eBook</a>
+            </div>
+            <!-- Chemistry Resources -->
+            <div class="subject-card">
+                <div class="subject-header chemistry-alt">
+                    <i class="fa-solid fa-flask"></i> Chemistry
+                </div>
+                <div class="subject-title">Organic Chemistry</div>
+                <div class="subject-desc">
+                    Utilize our database for lab experiments and chemical equation balancing tips.
+                </div>
+                <a class="subject-btn" href="#"><i class="fa-solid fa-box-archive"></i> Download Resources</a>
+            </div>
+            <!-- Biology -->
+            <div class="subject-card">
+                <div class="subject-header biology">
+                    <i class="fa-solid fa-dna"></i> Biology
+                </div>
+                <div class="subject-title">Molecular Biology</div>
+                <div class="subject-desc">
+                    Engage with video lectures and gain insights on various biological concepts.
+                </div>
+                <a class="subject-btn" href="#"><i class="fa-solid fa-book-open"></i> Read Online</a>
+            </div>
+        </div>
+    </section>
+      <!-- ... Your other main content here (Hero, Features, Subjects, Footer, etc.) ... -->
+  
+  <!-- Floating chat toggle button -->
+  <a href="chat.html" id="chat-toggle" aria-label="Open chat helper" title="Chat">
+    <i class="fa-solid fa-robot"></i>
+  </a>
+
+  <!-- Chat popup window -->
+  <div id="chat-popup" role="dialog" aria-modal="true" aria-label="AI Chat Assistant">
+    
+        <div class="ai-heading">
+            <i class="fa-solid fa-robot"></i> AI Helper
+        </div>
+        <section id="chatBody" tabindex="0" aria-live="polite" aria-relevant="additions">
+            <article class="bubble bot" role="article" aria-label="Bot message">
+                <span class="icon bot"><i class="fa-solid fa-robot"></i></span>
+                Hi, how can I help you?
+            </article>
+        </section>
+        <form id="chatForm" aria-label="Send message form" autocomplete="off" novalidate>
+            <input type="text" id="chatInput" name="chatInput" required spellcheck="false"
+                   placeholder="Type your message…" aria-label="Chat input" autocomplete="off" />
+            <button type="submit" aria-label="Send message" title="Send">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m2.01 21 20.99-9L2.01 3v7l15 2-15 2z"/></svg>
+            </button>
+        </form>
+  </div>
+  </body>
+</header>
+
+   <!-- END PAGE CONTAINER -->
+       <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">BlinkNotes <span class="beta">Beta</span></div>
+                <div class="footer-desc">
+                    Empowering students worldwide through collaborative learning.<br>
+                    Share knowledge, discover insights, and excel together with our AI-powered notes sharing platform.
+                </div>
+                <div class="social-icons">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+            </div>
+<div class="footer-links" style="flex:2; display:flex; flex-direction:row; gap:40px; min-width:400px; align-items:flex-start;">
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Quick Links</div>
+    <a href="upload.html"><i class="fas fa-upload"></i> Upload Notes</a>
+    <a href="Browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
+    <a href="index.html"><i class="fas fa-trophy"></i> Leaderboard</a>
+    <a href="#"><i class="fas fa-question-circle"></i> Help & FAQ</a>
+    <a href="#"><i class="fas fa-code"></i> API Documentation</a>
+    <a href="chat.html"><i class="fas fa-mobile-alt"></i> Mobile App</a>
+  </div>
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Popular Subjects</div>
+    <a href="#"><i class="fas fa-square-root-alt"></i> Mathematics</a>
+    <a href="#"><i class="fas fa-laptop-code"></i> Computer Science</a>
+    <a href="#"><i class="fas fa-atom"></i> Physics</a>
+    <a href="#"><i class="fas fa-flask"></i> Chemistry</a>
+    <a href="#"><i class="fas fa-leaf"></i> Biology</a>
+    <a href="#"><i class="fas fa-chart-line"></i> Economics</a>
+  </div>
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Legal & Support</div>
+    <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+    <a href="#"><i class="fas fa-user-secret"></i> Privacy Policy</a>
+    <a href="#"><i class="fas fa-balance-scale"></i> Copyright Policy</a>
+    <a href="#"><i class="fas fa-book-reader"></i> Academic Integrity</a>
+    <a href="#" class="download-chapter"><i class="fas fa-download"></i> Download Free Chapter</a>
+  </div>
+</div>
+        </div>
+        <hr style="margin: 20px 0" />
+        <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
+    </footer>
+</body>
+</html>

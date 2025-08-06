@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Notes | BlinkNotes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font: Inter & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:400,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+
+
+</head>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.querySelector(".features-grid");
+  const resultsLabel = document.querySelector(".results-label");
+
+  fetch("http://localhost:3000/notes")
+    .then(res => res.json())
+    .then(notes => {
+      grid.innerHTML = "";
+      resultsLabel.textContent = `Showing ${notes.length} results`;
+
+      notes.forEach(note => {
+        const card = document.createElement("div");
+        card.className = "feature-card";
+        card.innerHTML = `
+          <img src="img/sample-note.jpg" alt="${note.title}" style="width:100%;height:95px;object-fit:cover;border-radius:15px;margin-bottom:10px;">
+          <div class="feature-title">${note.title}</div>
+          <div class="feature-pill">${note.subjectCode}</div>
+          <div class="feature-desc">${note.description || 'No description provided.'}</div>
+          <div style="margin:8px 0 3px 0;font-size:14px;color:#f3b700;">★★★★★</div>
+          <div style="font-size:14px;color:#888;">
+            by ${note.idNo || 'Anonymous'} &nbsp;&bull;&nbsp; ${note.downloads || 0} downloads<br>
+            ${new Date(note.createdAt).toLocaleDateString()}
+          </div>
+          <div style="margin-top:11px;display:flex;gap:8px;">
+            <button class="btn btn-outline" onclick="previewNote('${note.filename}')"><i class="fas fa-file-alt"></i> Preview</button>
+            <a href="http://localhost:3000/uploads/${note.filename}" class="btn btn-primary" download><i class="fas fa-download"></i> Download</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error("Failed to load notes:", err);
+      grid.innerHTML = "<p>Failed to load notes.</p>";
+    });
+});
+
+function previewNote(filename) {
+  window.open(`http://localhost:3000/uploads/${filename}`, '_blank');
+}
+</script>
+
+<body>
+  <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            BlinkNotes <span class="beta">Beta</span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="Browse.html"><i class="fa-solid fa-book-open"></i> Browse Notes</a></li>
+            <li><a href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+            <li><a href="chathtml"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+            <li><a href="index.html"><i class="fa-solid fa-info-circle"></i> About Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a class="btn btn-outline ic" href="chat.html"><i class="fa-solid fa-robot"></i> AI Helper</a>
+            <a class="btn btn-link" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+            <a class="btn btn-primary" href="signup.html"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+    </nav>
+
+  <!-- Main Section: Browse Notes -->
+  <section class="features-section">
+    <h2 class="section-title">Browse Notes</h2>
+    <p class="section-desc">Discover and download study notes from students worldwide &ndash; Powered by Google Drive</p>
+    <!-- Search and Filters -->
+    <div class="search-box" style="background:#fff; border-radius:16px; box-shadow:0 2px 16px rgba(0,0,0,0.06); padding:24px 28px 18px 28px; margin-bottom:18px; display:flex; flex-direction:column; gap:14px;">
+      <input class="search-input" type="text" placeholder="Search by title, subject code (e.g., CS340, MATH201), subject, or uploader name..." style="padding:12px 16px; border-radius:8px; border:1px solid #e0e0e0; font-size:16px; font-family:Inter, sans-serif; margin-bottom:6px; outline:none; transition:border 0.2s;">
+      <div class="search-examples" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span class="pill" style="background:#f3f3f7; color:#3a3a3a; border-radius:20px; padding:4px 14px; font-size:13px; font-weight:500;">CS340</span>
+        <span class="pill" style="background:#f3f3f7; color:#3a3a3a; border-radius:20px; padding:4px 14px; font-size:13px; font-weight:500;">MATH201</span>
+        <span class="pill" style="background:#f3f3f7; color:#3a3a3a; border-radius:20px; padding:4px 14px; font-size:13px; font-weight:500;">Data Structures</span>
+        <span class="pill" style="background:#f3f3f7; color:#3a3a3a; border-radius:20px; padding:4px 14px; font-size:13px; font-weight:500;">Prem</span>
+        <span class="examples-label" style="margin-left:auto; color:#888; font-size:13px;">Quick search examples:</span>
+      </div>
+      <div class="search-actions" style="display:flex; align-items:center; gap:18px; margin-top:4px;">
+        <button class="btn btn-outline" style="padding:7px 18px; border-radius:8px; border:1px solid #e0e0e0; background:#fff; color:#333; font-size:15px; font-family:Inter, sans-serif; cursor:pointer;"><i class="fas fa-filter"></i> Filters</button>
+        <div class="view-switch" style="display:flex; align-items:center; gap:8px;">
+          <span class="view-label" style="font-size:14px; color:#888;">View:</span>
+          <button class="btn btn-link active" style="background:#f3b700; color:#fff; border-radius:6px; padding:6px 10px; border:none; font-size:16px; cursor:pointer;"><i class="fas fa-th-large"></i></button>
+          <button class="btn btn-link" style="background:#f3f3f7; color:#333; border-radius:6px; padding:6px 10px; border:none; font-size:16px; cursor:pointer;"><i class="fas fa-bars"></i></button>
+        </div>
+      </div>
+    </div>
+    <p class="results-label" style="margin:0 0 18px 2px; font-size:15px; color:#444; font-family:Inter, sans-serif;">Showing 8 results</p>
+
+    <!-- Notes Grid -->
+    <div class="features-grid">
+      <!-- Card 1 -->
+      <div class="feature-card">
+        <img src="img/calculus.jpg" alt="" style="width:100%;height:95px;object-fit:cover;border-radius:15px;margin-bottom:10px;">
+        <div class="feature-title">Calculus Unit 1: Derivatives and Limits</div>
+        <div class="feature-pill">MATH201</div>
+        <div class="feature-desc">Comprehensive notes covering derivatives, limits, and continuity with solved problems.</div>
+        <div style="margin:8px 0 3px 0;font-size:14px;color:#f3b700;">★★★★★</div>
+        <div style="font-size:14px;color:#888;">by Prem Kumar &nbsp;&bull;&nbsp; 1243 downloads<br>Jan 15, 2024</div>
+        <div style="margin-top:11px;display:flex;gap:8px;">
+          <button class="btn btn-outline"><i class="fas fa-file-alt"></i> Preview</button>
+          <button class="btn btn-primary"><i class="fas fa-download"></i> Download</button>
+        </div>
+      </div>
+  <!-- END PAGE CONTAINER -->
+       <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">BlinkNotes <span class="beta">Beta</span></div>
+                <div class="footer-desc">
+                    Empowering students worldwide through collaborative learning.<br>
+                    Share knowledge, discover insights, and excel together with our AI-powered notes sharing platform.
+                </div>
+                <div class="social-icons">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+            </div>
+<div class="footer-links" style="flex:2; display:flex; flex-direction:row; gap:40px; min-width:400px; align-items:flex-start;">
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Quick Links</div>
+    <a href="1_upload.html"><i class="fas fa-upload"></i> Upload Notes</a>
+    <a href="Browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
+    <a href="Browse.html#leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
+    <a href="index.html"><i class="fas fa-question-circle"></i> Help & FAQ</a>
+    <a href="index.html"><i class="fas fa-code"></i> API Documentation</a>
+    <a href="index.html"><i class="fas fa-mobile-alt"></i> Mobile App</a>
+  </div>
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Popular Subjects</div>
+    <a href="#"><i class="fas fa-square-root-alt"></i> Mathematics</a>
+    <a href="#"><i class="fas fa-laptop-code"></i> Computer Science</a>
+    <a href="#"><i class="fas fa-atom"></i> Physics</a>
+    <a href="#"><i class="fas fa-flask"></i> Chemistry</a>
+    <a href="#"><i class="fas fa-leaf"></i> Biology</a>
+    <a href="#"><i class="fas fa-chart-line"></i> Economics</a>
+  </div>
+  <div style="display:flex; flex-direction:column;">
+    <div class="footer-title">Legal & Support</div>
+    <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+    <a href="#"><i class="fas fa-user-secret"></i> Privacy Policy</a>
+    <a href="#"><i class="fas fa-balance-scale"></i> Copyright Policy</a>
+    <a href="#"><i class="fas fa-book-reader"></i> Academic Integrity</a>
+    <a href="#" class="download-chapter"><i class="fas fa-download"></i> Download Free Chapter</a>
+  </div>
+</div>
+        </div>
+        <hr style="margin: 20px 0" />
+        <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
+    </footer>
+
+<script>
+
+
+  let allNotes = [];
+
+  async function loadNotes() {
+    try {
+      const res = await fetch('http://localhost:3000/notes');
+      allNotes = await res.json();
+      displayNotes(allNotes);
+    } catch (error) {
+      console.error("Error loading notes:", error);
+    }
+  }
+
+  function displayNotes(notes) {
+    const container = document.getElementById('notesContainer');
+    container.innerHTML = '';
+
+    notes.forEach(note => {
+      const card = document.createElement('div');
+      card.style.border = '1px solid #ccc';
+      card.style.padding = '10px';
+      card.style.margin = '10px';
+
+      card.innerHTML = `
+        <h3>${note.title}</h3>
+        <p><strong>Subject:</strong> ${note.subjectCode}</p>
+        <p><strong>Semester:</strong> ${note.semester}</p>
+        <p><strong>Description:</strong> ${note.description}</p>
+        <p><strong>Tags:</strong> ${note.tags.join(', ')}</p>
+        <a href="http://localhost:3000/${note.filePath}" download>Download</a>
+        <button onclick="previewPDF('${note.filePath}')">Preview</button>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    const filtered = allNotes.filter(note =>
+      note.title.toLowerCase().includes(query) ||
+      note.subjectCode.toLowerCase().includes(query) ||
+      note.semester.toLowerCase().includes(query) ||
+      note.tags.some(tag => tag.toLowerCase().includes(query))
+    );
+    displayNotes(filtered);
+  });
+
+function previewPDF(filePath) {
+  const previewWindow = window.open("", "_blank");
+  previewWindow.document.write(
+    '<embed src="http://localhost:3000/' + filePath + '" width="100%" height="100%" type="application/pdf">'
+  );
+}
+
+
+  loadNotes();
+</script>
+
+</body>
+</html>

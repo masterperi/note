@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - BlinkNotes</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:400,700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Inline styles for simplicity */
+    :root {
+      --main-bg: #d9d9d9;
+      --card-bg: #fff;
+      --btn-bg: #000;
+      --btn-radius: 15px;
+      --input-bg: #fff;
+      --input-radius: 15px;
+      --input-border: #e1e1e1;
+      --divider: #222;
+      --google-btn: #EEEEEE;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--main-bg);
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .signup-card {
+      background: var(--card-bg);
+      border-radius: 22px;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.09);
+      padding: 40px 38px;
+      width: 435px;
+      max-width: 97vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .brand-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 2px;
+    }
+    .main-title {
+      font-size: 2.7rem;
+      font-weight: 800;
+      color: #111;
+    }
+    .beta-badge {
+      padding: 6px 24px;
+      border-radius: 25px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 1.3rem;
+    }
+    .form-head {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #222;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .form-desc {
+      font-size: 1.2rem;
+      color: rgba(0, 0, 0, 0.6);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .input-holder {
+      display: flex;
+      align-items: center;
+      background: var(--input-bg);
+      border: 1.6px solid var(--input-border);
+      border-radius: var(--input-radius);
+      padding: 6px 14px;
+      height: 49px;
+    }
+    .input-holder i {
+      color: #a8a8a8;
+      margin-right: 13px;
+    }
+    .input-holder input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      font-size: 1.16rem;
+    }
+    .signup-btn {
+      width: 100%;
+      background: var(--btn-bg);
+      color: #fff;
+      border: none;
+      border-radius: var(--btn-radius);
+      height: 49px;
+      font-size: 1.16rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .signup-btn:hover {
+      background: #222;
+    }
+    .terms-text {
+      font-size: 0.9rem;
+      color: #828282;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .terms-text a {
+      color: #222;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-card">
+    <div class="brand-row">
+      <span class="main-title">BlinkNotes</span>
+      <span class="beta-badge">Beta</span>
+    </div>
+    <div class="form-head">Create an Account</div>
+    <div class="form-desc">Enter your email to sign up for this app</div>
+    <form id="signup-form" autocomplete="on">
+      <div class="input-holder">
+        <i class="fa-regular fa-envelope"></i>
+        <input type="email" id="email" placeholder="Email" required>
+      </div>
+      <div class="input-holder">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <button class="signup-btn" type="submit">
+        <i class="fa-solid fa-user-plus"></i>
+        Sign Up
+      </button>
+    </form>
+    <div class="terms-text">
+      By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+    </div>
+  </div>
+<script src="config.js"></script>
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch(`${window.env.API_URL}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(data.message);
+          window.location.href = 'login.html';
+        } else {
+          alert(data.error || 'Registration failed');
+        }
+      } catch (error) {
+        alert('An error occurred. Please try again later.');
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
