@@ -36,7 +36,10 @@ if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 app.use('/uploads', express.static(uploadsDir));
 
 // Routes
-app.use('/upload', require('./routes/upload')); // File upload route
+app.use('/upload', require('./routes/upload')); // File upload route 
+
+app.use('/api', require('./routes/'));
+app.use('/api/notes/file:filename', require('./routes/file:filename'));
 
 
 

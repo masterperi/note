@@ -53,4 +53,28 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 });
 
+
+
+// Get all notes metadata
+router.get('/', async (req, res) => {
+  try {
+    const notes = await Note.find().sort({ createdAt: -1 });
+    res.status(200).json(notes);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch notes', error: err.message });
+  }
+});
+
+// Serve a file
+router.get('/file/:filename', async (req, res) => {
+  const filePath = path.join(__dirname, '..', 'uploads', req.params.filename);
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) return res.status(404).json({ message: 'File not found' });
+    res.sendFile(filePath);
+  });
+});
+
+
+
+
 module.exports = router;
