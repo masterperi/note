@@ -1,24 +1,27 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const Note = require('../models/Note');
 
-const noteSchema = new mongoose.Schema({
-  title: String,
-  subject: String,
-  semester: String,
-  description: String,
-  tags: [String],
-  filename: String,
-  originalname: String,
-  uploader: String,
-  path: String,
-  size: Number,
-  downloads: {
-    type: Number,
-    default: 0
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+const router = express.Router();
+
+// GET all notes
+router.get('/', async (req, res) => {
+  try {
+    const notes = await Note.find().sort({ createdAt: -1 });
+    res.status(200).json(notes);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch notes', error: err.message });
   }
 });
 
-module.exports = mongoose.model('Note', noteSchema);
+// GET a file
+router.get('/file/:filename', (req, res) => {
+  const filePath = path.join(__dirname, '..', 'uploads', req.params.filename);
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) return res.status(404).json({ message: 'File not found' });
+    res.sendFile(filePath);
+  });
+});
+
+module.exports = router;

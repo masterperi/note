@@ -38,9 +38,16 @@ app.use('/uploads', express.static(uploadsDir));
 // Routes
 app.use('/upload', require('./routes/upload')); // File upload route 
 
-app.use('/api', require('./routes/'));
-app.use('/api/notes/file:filename', require('./routes/file:filename'));
-
+// app.use('/api', require('./routes/'));
+// app.use('/api/notes/file:filename', require('./routes/file:filename'));
+app.get("/api/notes", async (req, res) => {
+  try {
+    const notes = await Note.find();
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 
 // Start server
