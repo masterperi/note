@@ -5,7 +5,12 @@ const cors = require('cors');
 const fs = require('fs');
 const auth =require('./routes/auth');
 const dotenv = require('dotenv');
+
+
+
 dotenv.config();
+
+
 const chat = require('./routes/chatbot');
 const app = express();
 const PORT = 3000;
@@ -32,6 +37,8 @@ app.use('/uploads', express.static(uploadsDir));
 
 // Routes
 app.use('/upload', require('./routes/upload')); // File upload route
+
+
 
 // Start server
 app.listen(PORT, () => {
