@@ -1,8 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>File Upload - BlinkNotes</title>
+  <meta charset="UTF-8">
+  <title>Upload Subject Details</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Font: Inter & Plus Jakarta Sans -->
@@ -11,7 +11,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
-        <style>
+  <style>
+
     :root {
       --main-bg: #d9d9d9;
       --card-bg: #fff;
@@ -154,12 +155,43 @@
       .upload-page-container {flex-direction: column; gap: 24px; padding: 0 0;}
       .form-col, .info-col {min-width: 0; width: 100%;}
     }
+
+.info-col {
+  flex: 0.35; /* make the right column narrower */
+  min-width: 10px;
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px; /* less padding inside */
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+  font-size: 0.9rem; /* smaller text */
+}
+
+.panel h3 {
+  font-size: 1rem; /* smaller heading */
+  margin-bottom: 8px;
+}
+
+.panel ul {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.panel li {
+  margin-bottom: 5px; /* tighter spacing */
+}
+
+  
   </style>
 </head>
-
-
 <body>
-        <!-- Navbar -->
+          <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-brand">
             BlinkNotes <span class="beta">Beta</span>
@@ -178,8 +210,7 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <header class="upload-header" style="margin-top: 10px; margin-bottom: 10px;">
+        <header class="upload-header" style="margin-top: 10px; margin-bottom: 10px;">
         <h1 style="margin-bottom: 8px;"><i class="fa-solid fa-upload"></i> Upload Your Note</h1>
         <p class="lead" style="margin-bottom: 8px;">Share your knowledge with fellow students</p>
         <div class="hero-stats" style="display: flex; gap: 18px; font-weight: 600; color: #333;">
@@ -188,89 +219,106 @@
             <div><strong>95%</strong> Success Rate</div>
         </div>
     </header>
-  <!-- Page Container -->
-<!-- LEFT COLUMN: FORM -->
-<div class="form-col">
-  <h2 class="section-title"><i class="fa-solid fa-upload"></i> Upload Your Note</h2>
-  <div class="progress-label">
-    <i class="fa-solid fa-chart-line"></i> Upload Progress
-  </div>
-  <div class="progress-bar-bg">
-    <div class="progress-bar-fill" id="progressBarFill">0%</div>
+    <div class="info-col">
+      <div class="info-col">
+  <div class="container">
+    <h2 class="mb-4"><i class="fa-solid fa-upload"></i> Upload Subject Details</h2>
+
+<div class="upload-page">
+
+  <!-- LEFT COLUMN -->
+  <div class="form-col">
+    <h2 class="section-title"><i class="fa-solid fa-upload"></i> Upload Your Note</h2>
+
+    <!-- Progress Bar -->
+    <div class="progress-label"><i class="fa-solid fa-chart-line"></i> Upload Progress</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBarFill">0%</div>
+    </div>
+
+    <div class="card p-4 shadow-sm">
+      <form id="uploadForm" enctype="multipart/form-data">
+        
+        <div class="form-row">
+          <label class="form-label"><i class="fa-solid fa-id-badge"></i> User ID</label>
+          <input type="text" name="userID" class="form-control" required>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label"><i class="fa-solid fa-code"></i> Subject Code</label>
+          <input type="text" name="subjectCode" class="form-control" required>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label"><i class="fa-solid fa-heading"></i> Subject Title</label>
+          <input type="text" name="subjectTitle" class="form-control" required>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label"><i class="fa-solid fa-tags"></i> Tags (comma separated)</label>
+          <input type="text" name="tags" class="form-control">
+        </div>
+
+        <div class="form-row">
+          <label class="form-label"><i class="fa-solid fa-graduation-cap"></i> Semester</label>
+          <input type="text" name="semester" class="form-control" required>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label"><i class="fa-solid fa-align-left"></i> Description</label>
+          <textarea name="description" class="form-control" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label"><i class="fa-solid fa-file-pdf"></i> Upload PDF File</label>
+          <input type="file" name="file" class="form-control" accept="application/pdf" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Submit</button>
+      </form>
+    </div>
   </div>
 
-  
-  <form class="upload-form" id="uploadForm" enctype="multipart/form-data">
-    <div class="form-row">
-      <label for="noteTitle"><i class="fa-solid fa-heading"></i> Note Title <span class="required">*</span></label>
-      <input type="text" id="noteTitle" name="title" placeholder="Enter note title" required>
+  <!-- RIGHT COLUMN -->
+  <div class="info-col">
+    <div class="panel file-requirements">
+      <h3><i class="fa-solid fa-file-lines"></i> File Requirements</h3>
+      <ul>
+        <li><strong>Supported types:</strong> PDF, Word</li>
+        <li><strong>Max size:</strong> 30 MB</li>
+        <li>Use clear diagrams</li>
+        <li>Add descriptive titles & tags</li>
+        <li>Organize content logically</li>
+        <li>Ensure text is searchable</li>
+        <li>Use readable fonts and sizes</li>
+        <li>Check for spelling & grammar</li>
+        <li>Include references if applicable</li>
+      </ul>
     </div>
-    <div class="form-row">
-      <label for="subjectCode"><i class="fa-solid fa-code"></i> Subject Code <span class="required">*</span></label>
-      <input type="text" id="subjectCode" name="subjectCode" placeholder="e.g. CS101" required>
+    <div class="panel success-tips">
+      <h3><i class="fa-solid fa-lightbulb"></i> Success Tips</h3>
+      <ul>
+          <li>Choose relevant tags</li>
+          <li>Use descriptive titles</li>
+          <li>Keep it clear and concise</li>
+          <li>Break content into bullet points</li>
+          <li>Add real-world examples</li>
+          <li>Highlight key terms and formulas</li>
+          <li>Use high-quality images</li>
+          <li>Provide a short summary</li>
+        </ul>
     </div>
-    <div class="form-row">
-      <label for="semester"><i class="fa-solid fa-graduation-cap"></i> Semester <span class="required">*</span></label>
-      <select id="semester" name="semester" required>
-        <option value="" disabled selected>Select semester</option>
-        <option value="1">1</option><option value="2">2</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label for="idNo"><i class="fa-solid fa-id-badge"></i> ID No <span class="required">*</span></label>
-      <input type="text" id="idNo" name="idNo" placeholder="Enter ID number" required>
-    </div>
-    <div class="form-row description-row">
-      <label for="description"><i class="fa-solid fa-align-left"></i> Description</label>
-      <textarea id="description" name="description" rows="4" placeholder="Write a short description..."></textarea>
-    </div>
-    <div class="form-row">
-      <label for="tags"><i class="fa-solid fa-tags"></i> Tags <span class="required">*</span></label>
-      <input type="text" id="tags" name="tags" placeholder="e.g. java, data structures" required>
-    </div>
-    <div class="form-row">
-      <label for="uploadFile"><i class="fa-solid fa-file-upload"></i> Upload Your File <span class="required">*</span></label>
-      <input type="file" id="uploadFile" name="file" accept=".pdf,.doc,.docx,.jpg,.png" required>
-    </div>
-    <button type="submit" class="btn-primary" id="submitBtn" disabled>
-      <i class="fa-solid fa-rocket"></i> Launch Your Notes
-    </button>
-  </form>
-  <div class="drag-drop" style="margin-top:28px;">
-    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
-    <p>Or drag and drop your amazing notes here to upload the file</p>
   </div>
+
 </div>
 
 
 
-
-
-      <!-- RIGHT COLUMN: INFO PANELS -->
-    <div class="info-col">
-      <div class="panel file-requirements">
-        <h3><i class="fa-solid fa-file-lines"></i> File Requirements</h3>
-        <ul>
-          <li><strong>Supported types:</strong> Word Document, PDF</li>
-          <li><strong>Max size:</strong> 30 MB</li>
-          <li>Include clear diagrams and relevant examples</li>
-          <li>Use searchable titles and descriptive tags</li>
-          <li>Organize content logically and add helpful tips</li>
-        </ul>
-      </div>
-      <div class="panel success-tips">
-        <h3><i class="fa-solid fa-lightbulb"></i> Success Tips</h3>
-        <ul>
-          <li>Choose relevant tags</li>
-          <li>Use descriptive titles</li>
-          <li>Organize your content logically</li>
-          <li>Add helpful study tips</li>
-          <li>Include clear diagrams and examples</li>
-        </ul>
-      </div>
-    </div>
-
+    <a href="b.html" class="btn btn-success mt-3">📂 View All Stored PDFs</a>
   </div>
+
+
+
   <!-- END PAGE CONTAINER -->
        <!-- Footer -->
     <footer class="footer">
@@ -320,53 +368,26 @@
         <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
     </footer>
 
-<script src="config.js"></script>
-<script>
-  const form = document.getElementById('uploadForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const fileInput = document.getElementById('uploadFile');
-  const progressFill = document.getElementById('progressBarFill');
 
-  // Enable submit when file is chosen
-  fileInput.addEventListener('change', () => {
-    submitBtn.disabled = !fileInput.files.length;
-  });
+  <script>
+    const form = document.getElementById('uploadForm');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
 
-    const formData = new FormData(form);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `${window.env.API_URL}/upload`, true);
-
-    xhr.upload.onprogress = function (e) {
-      if (e.lengthComputable) {
-        const percent = Math.round((e.loaded / e.total) * 100);
-        progressFill.style.width = percent + "%";
-        progressFill.textContent = percent + "%";
-      }
-    };
-
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        alert("✅ Upload successful!");
+      try {
+        const response = await fetch('http://localhost:3000/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await response.json();
+        alert(result.message);
         form.reset();
-        progressFill.style.width = "0%";
-        progressFill.textContent = "0%";
-        submitBtn.disabled = true;
-      } else {
-        alert("✅ Upload successful!");
+      } catch (err) {
+        alert("Upload failed: " + err.message);
       }
-    };
-
-    xhr.onerror = function () {
-      alert("✅ Upload successful! Make sure your backend is running.");
-    };
-
-    xhr.send(formData);
-  });
-</script>
-
+    });
+  </script>
 </body>
 </html>

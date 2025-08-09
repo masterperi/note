@@ -10,8 +10,8 @@ app.use(cors());
 mongoose.connect('mongodb://localhost:27017/subjectData', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.error("❌ MongoDB Error:", err));
+}).then(() => console.log("MongoDB Connected"))
+  .catch(err => console.error("MongoDB Error:", err));
 
 // Mongoose Schema
 const SubjectSchema = new mongoose.Schema({
@@ -36,14 +36,21 @@ const upload = multer({ storage: storage });
 
 // Upload endpoint
 app.post('/upload', upload.single('file'), async (req, res) => {
-  const { userID, subjectCode, subjectTitle, tags, semester, description } = req.body;
+  const {
+    userID,
+    subjectCode,
+    subjectTitle,
+    tags,
+    semester,
+    description
+  } = req.body;
 
   try {
     const newSubject = new Subject({
       userID,
       subjectCode,
       subjectTitle,
-      tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+      tags: tags.split(',').map(tag => tag.trim()),
       semester,
       description,
       file: {
@@ -54,10 +61,10 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     });
 
     await newSubject.save();
-    res.json({ message: '✅ PDF uploaded and stored in MongoDB successfully' });
+    res.json({ message: 'PDF uploaded and stored in MongoDB successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: '❌ Upload failed', error: err.message });
+    res.status(500).json({ message: 'Upload failed', error: err.message });
   }
 });
 
@@ -65,20 +72,21 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 app.get('/file/:id', async (req, res) => {
   try {
     const subject = await Subject.findById(req.params.id);
-    if (!subject) return res.status(404).send("❌ File not found");
+    if (!subject) return res.status(404).send("File not found");
 
     res.set({
       'Content-Type': subject.file.contentType,
-      'Content-Disposition': `inline; filename="${subject.file.fileName}"`
+      'Content-Disposition': inline; filename="${subject.file.fileName}",
     });
 
     res.send(subject.file.data);
   } catch (err) {
-    res.status(500).send("❌ Error retrieving file");
+    res.status(500).send("Error retrieving file");
   }
 });
 
-// Endpoint to get all PDFs
+
+// ✅ New endpoint to get all PDFs
 app.get('/files', async (req, res) => {
   try {
     const subjects = await Subject.find();
@@ -89,11 +97,12 @@ app.get('/files', async (req, res) => {
     }));
     res.json(files);
   } catch (err) {
-    res.status(500).json({ message: "❌ Error fetching files" });
+    res.status(500).json({ message: "Error fetching files" });
   }
 });
 
+
 // Start server
 app.listen(3000, () => {
-  console.log("🚀 Server running on http://localhost:3000");
+  console.log("Server running on http://localhost:3000");
 });

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Stored PDFs | BlinkNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="pdfBrowseRedesign.css" />
+</head>
+<style>
+  /* Add your CSS styles here */
+:root {
+  --accent: #6366f1;
+  --radius: 15px;
+  --main-bg: #f6f6f9;
+  --card-bg: #fff;
+  --shadow: 0 2px 14px rgba(44,90,228,0.05);
+}
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: var(--main-bg);
+  color: #222;
+  margin: 0;
+}
+
+/* Navbar styling (reuse from previous) */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 32px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.navbar-brand { font-weight:bold; font-size:1.3em;}
+.beta { font-size:.8em; background:var(--accent); color:#fff; border-radius:7px; margin-left:7px; padding:2px 8px;}
+.navbar-menu, .navbar-actions {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  list-style: none;
+}
+.navbar-menu a { color: #333; text-decoration:none; font-weight:500; padding:7px 12px; border-radius: 8px; }
+.navbar-menu a.active, .navbar-menu a:hover { background: #eef0ff; color: var(--accent); }
+
+.btn-outline, .btn-primary, .btn-link, .btn-success {
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  transition: background 0.13s, color 0.13s;
+}
+.btn-outline { background: #fff; color: var(--accent); border: 1px solid var(--accent);}
+.btn-outline:hover { background: var(--accent); color: #fff;}
+.btn-primary { background: var(--accent); color: #fff;}
+.btn-link { background: none; color: var(--accent);}
+.btn-success { background: #31c48d; color: #fff;}
+.btn-success:hover { background: #27ab78;}
+.back-btn { margin-top: 32px; }
+
+.browse-container { max-width: 950px; margin: 42px auto 0 auto; padding-bottom: 70px;}
+.section-title {
+  font-size: 1.48em;
+  font-weight: 700;
+  margin: 38px 0 15px 0;
+}
+
+.pdf-search-box {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 21px 21px 17px 21px;
+  box-shadow: var(--shadow);
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  max-width: 480px;
+}
+
+.pdf-search-box label {
+  font-weight:600; margin-bottom:6px;
+}
+.pdf-input-row {
+  display: flex;
+  gap: 10px;
+}
+.pdf-input-row input[type="text"] {
+  flex: 2;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 9px 14px;
+  font-size: 15px;
+}
+.pdf-input-row .btn-success {
+  flex: 1;
+  padding: 9px 0;
+}
+
+/* PDF Cards Grid */
+.pdf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 28px;
+  margin-bottom: 40px;
+}
+.pdf-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 14px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-height: 320px;
+}
+.pdf-metadata {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.pdf-title {
+  font-weight:600; font-size:1.08em; color:#222;
+}
+.pdf-id-pill {
+  background: #eef0ff;
+  color: var(--accent);
+  padding: 3px 9px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pdf-frame {
+  width: 100%;
+  border: none;
+  min-height: 200px;
+  border-radius: 8px;
+  background: #f3f4f8;
+  margin-top: 4px;
+}
+
+.error-msg { color: red; font-weight:600; margin-top:12px;}
+
+@media (max-width:700px) {
+  .browse-container {padding: 0 10px;}
+  .pdf-grid {grid-template-columns: 1fr;}
+  .pdf-card {min-height:220px;}
+  .pdf-search-box {max-width: 100%;}
+  .section-title {font-size:1.11em;}
+}
+
+</style>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-brand">BlinkNotes <span class="beta">Beta</span></div>
+  <ul class="navbar-menu">
+    <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+    <li><a href="Browse.html" class="active"><i class="fa-solid fa-book-open"></i> Browse Notes</a></li>
+    <li><a href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+    <li><a href="chat.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+    <li><a href="index.html"><i class="fa-solid fa-info-circle"></i> About Us</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a class="btn btn-outline ic" href="#"><i class="fa-solid fa-robot"></i> AI Helper</a>
+    <a class="btn btn-link" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+    <a class="btn btn-primary" href="signup.html"><i class="fa-solid fa-user-plus"></i> Register</a>
+  </div>
+</nav>
+
+<main class="browse-container">
+  <h2 class="section-title">📂 Display Stored PDF</h2>
+  <section class="pdf-search-box">
+    <label for="docId">Enter Document ID</label>
+    <div class="pdf-input-row">
+      <input type="text" id="docId" placeholder="Enter Document ID (e.g., aabbcc123)" />
+      <button class="btn btn-success" onclick="loadPDF()"><i class="fas fa-search"></i> Load PDF</button>
+    </div>
+    <iframe id="pdfViewer" class="pdf-frame" hidden></iframe>
+  </section>
+
+  <h2 class="section-title">📚 All Stored PDFs</h2>
+  <section class="pdf-grid" id="pdfContainer"></section>
+
+  <a href="upload.html" class="btn btn-primary back-btn"><i class="fas fa-arrow-left"></i> Back to Upload</a>
+</main>
+
+<!-- Footer same as before -->
+<!-- ... Paste your footer HTML here ... -->
+
+<script>
+  async function loadPDF() {
+    const docId = document.getElementById('docId').value.trim();
+    const viewer = document.getElementById('pdfViewer');
+    if (!docId) {
+      alert("Please enter a document ID");
+      viewer.hidden = true;
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:3000/file/${docId}`);
+      if (!response.ok) throw new Error('File not found');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      viewer.src = url;
+      viewer.hidden = false;
+    } catch (error) {
+      alert("Error loading PDF: " + error.message);
+      viewer.hidden = true;
+    }
+  }
+
+  async function loadAllPDFs() {
+    const container = document.getElementById('pdfContainer');
+    container.innerHTML = '<p>Loading...</p>';
+    try {
+      const listResponse = await fetch('http://localhost:3000/files');
+      const files = await listResponse.json();
+      if (files.length === 0) {
+        container.innerHTML = '<p>No PDFs found.</p>';
+        return;
+      }
+      container.innerHTML = '';
+      files.forEach(file => {
+        const card = document.createElement('div');
+        card.className = 'pdf-card';
+        card.innerHTML = `
+          <div class="pdf-metadata">
+            <span class="pdf-title"><i class="fa-solid fa-file-pdf"></i> ${file.fileName}</span>
+            <span class="pdf-id-pill">${file.id}</span>
+          </div>
+          <iframe src="http://localhost:3000/file/${file.id}" class="pdf-frame"></iframe>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      container.innerHTML = `<p class="error-msg">Error loading PDFs: ${err.message}</p>`;
+    }
+  }
+
+  window.onload = loadAllPDFs;
+</script>
+</body>
+</html>
