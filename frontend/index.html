@@ -20,59 +20,6 @@
       color: #18181b;
       min-height: 100vh;
     }
-    /* Navbar */
-    .navbar {
-      width: 100%;
-      background: #FFFEFE;
-      border-top-left-radius: 25px;
-      border-top-right-radius: 25px;
-      display: flex;
-      align-items: center;
-      padding: 0 3vw;
-      height: 74px;
-      box-sizing: border-box;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 16px rgba(100,110,120,0.04);
-    }
-    .navbar .navbar-brand {
-      font-size: 32px;
-      font-weight: 800;
-      margin-right: 2vw;
-      display: flex;
-      align-items: center;
-    }
-    .navbar .beta {
-      background: rgba(0,0,0,0.64);
-      color: #fff;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 400;
-      padding: 2px 10px;
-      margin-left: 7px;
-    }
-    .navbar-menu {
-      display: flex;
-      gap: 32px;
-      flex: 1 1 auto;
-      list-style: none;
-      font-size: 13px;
-      font-weight: 500;
-      color: #222;
-      margin: 0;
-      padding: 0;
-    }
-    .navbar-menu li {
-      cursor: pointer;
-      transition: color 0.18s;
-    }
-    .navbar-menu li:hover {
-      color: #1d62c5;
-    }
-    .navbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
     .btn {
       border: none;
       cursor: pointer;
@@ -630,23 +577,10 @@
 </head>
 <body>
       <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            BlinkNotes <span class="beta">Beta</span>
-        </div>
-        <ul class="navbar-menu">
-            <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
-            <li><a href="browse.html"><i class="fa-solid fa-book-open"></i> Browse Notes</a></li>
-            <li><a href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
-            <li><a href="chat.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
-            <li><a href="index.html"><i class="fa-solid fa-info-circle"></i> About Us</a></li>
-        </ul>
-        <div class="navbar-actions">
-            <a class="btn btn-outline ic" href="chat.html"><i class="fa-solid fa-robot"></i> AI Helper</a>
-            <a class="btn btn-link" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-            <a class="btn btn-primary" href="signup.html"><i class="fa-solid fa-user-plus"></i> Register</a>
-        </div>
-    </nav>
+
+
+
+
 <header>
     <!-- Hero Section -->
     <header class="hero-section">
@@ -654,13 +588,15 @@
         <h1 class="hero-title">
             Smart Notes Sharing Platform for <br/><span>Students</span>
         </h1>
-        <p class="hero-desc">
-            Upload, share, and download notes from peers across all subjects.<br>
-            Enhance your learning with AI-powered features and collaborative study materials.
-        </p>
+        <div>
+          <h2 class="hero-desc"></h2>
+              Upload, share, and download notes from peers <br/>across all subjects.<br/>
+              Enhance your learning with AI-powered features and collaborative study materials.
+          </h2>
+        </div>
         <div class="hero-cta">
-            <button class="btn btn-primary btn-lg">Get Started →</button>
-            <button class="btn btn-outline btn-lg">Browse Notes</button>
+            <button class="btn btn-primary btn-lg" onclick="window.location.href='a.html'">Get Started →</button>
+            <button class="btn btn-outline btn-lg" onclick="window.location.href='b.html'">Browse Notes</button>
         </div>
         <div class="hero-stats">
             <div>
@@ -804,81 +740,10 @@
     </section>
       <!-- ... Your other main content here (Hero, Features, Subjects, Footer, etc.) ... -->
   
-  <!-- Floating chat toggle button -->
-  <a href="chat.html" id="chat-toggle" aria-label="Open chat helper" title="Chat">
-    <i class="fa-solid fa-robot"></i>
-  </a>
-
-  <!-- Chat popup window -->
-  <div id="chat-popup" role="dialog" aria-modal="true" aria-label="AI Chat Assistant">
-    
-        <div class="ai-heading">
-            <i class="fa-solid fa-robot"></i> AI Helper
-        </div>
-        <section id="chatBody" tabindex="0" aria-live="polite" aria-relevant="additions">
-            <article class="bubble bot" role="article" aria-label="Bot message">
-                <span class="icon bot"><i class="fa-solid fa-robot"></i></span>
-                Hi, how can I help you?
-            </article>
-        </section>
-        <form id="chatForm" aria-label="Send message form" autocomplete="off" novalidate>
-            <input type="text" id="chatInput" name="chatInput" required spellcheck="false"
-                   placeholder="Type your message…" aria-label="Chat input" autocomplete="off" />
-            <button type="submit" aria-label="Send message" title="Send">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m2.01 21 20.99-9L2.01 3v7l15 2-15 2z"/></svg>
-            </button>
-        </form>
-  </div>
   </body>
 </header>
 
-   <!-- END PAGE CONTAINER -->
-       <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="footer-logo">BlinkNotes <span class="beta">Beta</span></div>
-                <div class="footer-desc">
-                    Empowering students worldwide through collaborative learning.<br>
-                    Share knowledge, discover insights, and excel together with our AI-powered notes sharing platform.
-                </div>
-                <div class="social-icons">
-                    <i class="fa-brands fa-facebook-f"></i>
-                    <i class="fa-brands fa-x-twitter"></i>
-                    <i class="fa-brands fa-instagram"></i>
-                </div>
-            </div>
-<div class="footer-links" style="flex:2; display:flex; flex-direction:row; gap:40px; min-width:400px; align-items:flex-start;">
-  <div style="display:flex; flex-direction:column;">
-    <div class="footer-title">Quick Links</div>
-    <a href="upload.html"><i class="fas fa-upload"></i> Upload Notes</a>
-    <a href="Browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
-    <a href="index.html"><i class="fas fa-trophy"></i> Leaderboard</a>
-    <a href="#"><i class="fas fa-question-circle"></i> Help & FAQ</a>
-    <a href="#"><i class="fas fa-code"></i> API Documentation</a>
-    <a href="chat.html"><i class="fas fa-mobile-alt"></i> Mobile App</a>
-  </div>
-  <div style="display:flex; flex-direction:column;">
-    <div class="footer-title">Popular Subjects</div>
-    <a href="#"><i class="fas fa-square-root-alt"></i> Mathematics</a>
-    <a href="#"><i class="fas fa-laptop-code"></i> Computer Science</a>
-    <a href="#"><i class="fas fa-atom"></i> Physics</a>
-    <a href="#"><i class="fas fa-flask"></i> Chemistry</a>
-    <a href="#"><i class="fas fa-leaf"></i> Biology</a>
-    <a href="#"><i class="fas fa-chart-line"></i> Economics</a>
-  </div>
-  <div style="display:flex; flex-direction:column;">
-    <div class="footer-title">Legal & Support</div>
-    <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
-    <a href="#"><i class="fas fa-user-secret"></i> Privacy Policy</a>
-    <a href="#"><i class="fas fa-balance-scale"></i> Copyright Policy</a>
-    <a href="#"><i class="fas fa-book-reader"></i> Academic Integrity</a>
-    <a href="#" class="download-chapter"><i class="fas fa-download"></i> Download Free Chapter</a>
-  </div>
-</div>
-        </div>
-        <hr style="margin: 20px 0" />
-        <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
-    </footer>
+      
+
 </body>
 </html>
