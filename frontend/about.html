@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>BlinkNotes Chatbot</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap 5 -->
+  <title>About BlinkNotes</title>
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <!-- AOS Animation CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <style>
     :root {
       --brand-bg: #6c47ff;
@@ -15,9 +17,10 @@
       --accent: #ffd500;
     }
     body {
-      background: #f5f7fa;
-      font-family: 'Inter', 'Plus Jakarta Sans', Arial, sans-serif;
+      background-color: #f8f9fa;
+      font-family: 'Inter', Arial, sans-serif;
     }
+    /* Navbar & Footer Styles */
     .navbar, .footer {
       background: var(--brand-bg) !important;
       color: var(--brand-text) !important;
@@ -70,110 +73,87 @@
       background: var(--brand-text);
       color: var(--brand-bg);
     }
-    .chat-container {
-      width: 100%;
-      max-width: 430px;
-      height: 540px;
-      border-radius: 25px;
-      box-shadow: 0 0 40px rgba(29, 98, 197, 0.20);
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      margin: 40px auto 0 auto;
-      overflow: hidden;
-      font-family: 'Inter', 'Plus Jakarta Sans', Arial, sans-serif;
+    /* Section & Card Effects */
+    .section-title {
+      font-weight: bold;
+      color: var(--brand-bg);
+      font-size: 1.3rem;
     }
-    .header {
-      background: var(--brand-bg);
-      color: white;
-      padding: 16px 20px;
+    .card {
+      border-radius: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: none;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(108,71,255,0.18);
+    }
+    .logo-text {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--brand-bg);
+      animation: fadeInDown 1s ease-in-out;
+    }
+    @keyframes fadeInDown {
+      0% { transform: translateY(-20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    /* Footer */
+    .footer {
+      padding: 40px 0 20px 0;
+      margin-top: 40px;
+    }
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--brand-text);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-weight: 700;
-      font-size: 20px;
-      border-top-left-radius: 25px;
-      border-top-right-radius: 25px;
-      user-select: none;
     }
-    .beta-badge {
-      background: var(--accent);
-      color: var(--brand-bg);
-      padding: 3px 10px;
-      border-radius: 12px;
+    .footer-title {
       font-weight: 700;
-      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 8px;
     }
-    .clear-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: #fff;
+    .footer-links a {
+      color: var(--brand-text);
+      text-decoration: none;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .footer-links a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .footer-bottom {
+      text-align: center;
+      color: var(--brand-text);
+      font-size: 1rem;
+      margin-top: 20px;
+    }
+    .social-icons i {
       font-size: 22px;
-      transition: color 0.3s ease;
-      padding: 0;
+      margin-right: 15px;
+      color: var(--brand-text);
+      transition: color 0.23s;
     }
-    .clear-btn:hover {
+    .social-icons i:hover {
       color: var(--accent);
     }
-    .chat-body {
-      flex: 1;
-      padding: 16px;
-      background: #f7f7fa;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      overflow-y: auto;
-      font-size: 15px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--brand-bg) #e1e1e1;
+    @media (max-width: 900px) {
+      .footer-content { flex-direction: column; gap: 20px; }
+      .navbar .navbar-brand { font-size: 1.5rem; }
     }
-    .bubble {
-      max-width: 75%;
-      padding: 14px 20px;
-      border-radius: 18px;
-      box-shadow: 0 6px 16px rgba(29, 98, 197, 0.10);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 600;
-      line-height: 1.5;
-      word-break: break-word;
-      white-space: pre-line;
-      animation: fadeInUp 0.3s cubic-bezier(.36,1.39,.49,.78) both;
-      position: relative;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0.3; transform: translateY(14px); }
-      to { opacity: 1; transform: none; }
-    }
-    .bubble.bot {
-      background: #e1e9f8;
-      color: #18181b;
-      align-self: flex-start;
-    }
-    .bubble.user {
-      background: var(--brand-bg);
-      color: #fff;
-      align-self: flex-end;
-      box-shadow: 0 6px 20px rgba(29, 98, 197, 0.18);
-    }
-    #chatForm {
-      display: flex;
-      padding: 16px 20px;
-      border-top: 1.5px solid #cfcfcf;
-      background: #fff;
-      gap: 12px;
-    }
-    #chatInput {
-      flex-grow: 1;
-      padding: 14px 16px;
-      font-size: 16px;
-      border-radius: 25px;
-      border: 2px solid #cfcfcf;
-      outline-offset: 4px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
+
         :root {
       --brand-bg: #6c47ff;
       --brand-text: #fff;
@@ -253,35 +233,6 @@
       .footer-content { flex-direction: column; gap: 20px; }
       .navbar .navbar-brand { font-size: 1.5rem; }
     }
-    #chatInput:focus {
-      border-color: var(--brand-bg);
-      box-shadow: 0 0 14px #6c47ffaa;
-      background: #fff;
-    }
-    #chatForm button[type="submit"] {
-      background: var(--brand-bg);
-      color: #fff;
-      border: none;
-      border-radius: 22px;
-      width: 46px;
-      height: 46px;
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(29, 98, 197, 0.10);
-      transition: background-color 0.3s ease;
-    }
-    #chatForm button[type="submit"]:hover { background: #14529a; }
-    #chatForm button[type="submit"]:active { background: #0f3e75; }
-    @media (max-width: 480px) {
-      .chat-container { max-width: 99vw; height: 410px; margin: 12px auto 0 auto;}
-    }
-    @media (max-width: 900px) {
-      .footer-content { flex-direction: column; gap: 20px; }
-      .navbar .navbar-brand { font-size: 1.5rem; }
-    }
   </style>
 </head>
 <body>
@@ -297,9 +248,9 @@
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="browse.html"><i class="fa-solid fa-book"></i> Browse Notes</a></li>
-          <li class="nav-item"><a class="nav-link active" href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+          <li class="nav-item "><a class="nav-link" href="Browse.html"><i class="fa-solid fa-book"></i> Browse Notes</a></li>
+          <li class="nav-item"><a class="nav-link" href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
           <li class="nav-item"><a class="nav-link" href="about.html"><i class="fa-solid fa-users"></i> About Us</a></li>
         </ul>
         <div class="d-flex ms-lg-4 gap-2">
@@ -310,22 +261,55 @@
       </div>
     </div>
   </nav>
-  <!-- Chatbot Main -->
-  <div class="chat-container">
-    <div class="header">
-      <span class="logo"><i class="fa-solid fa-book-open-reader me-2"></i> BlinkNotes <span class="beta-badge">Beta</span></span>
-
-      <button class="clear-btn" title="Clear Chat"><i class="fa-solid fa-trash"></i></button>
+  <!-- MAIN CONTENT -->
+  <div class="container py-5">
+    <div class="text-center mb-4" data-aos="fade-down">
+      <div class="logo-text"><i class="fa-solid fa-book-open-reader"></i> BlinkNotes</div>
+      <p class="lead">Your Smart Hub for Study Notes</p>
     </div>
-    <div class="chat-body" id="chatBody">
-      <div class="bubble bot">Hi, how can I help you?</div>
+    <div class="row g-4">
+      <div class="col-lg-6 col-md-12" data-aos="fade-right">
+        <div class="card p-4">
+          <h5 class="section-title"><i class="fa-solid fa-thumbtack"></i> Problem</h5>
+          <p>Students often struggle to find quality study materials for specific subjects or semesters. 
+          Notes are scattered across WhatsApp groups, Google Drive links, or personal devices — making them 
+          hard to search and organize. This leads to wasted time and the use of outdated resources.</p>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12" data-aos="fade-left">
+        <div class="card p-4">
+          <h5 class="section-title"><i class="fa-solid fa-lightbulb"></i> Solution</h5>
+          <p>BlinkNotes is a centralized online platform where students can upload notes with subject details, 
+          tags, and descriptions. They can search & browse by subject code, semester, keywords, or tags, and 
+          preview or download instantly — ensuring easy access and collaboration.</p>
+        </div>
+      </div>
     </div>
-    <form class="chat-input-area" id="chatForm">
-      <input type="text" class="chat-input" placeholder="Type your message…" autocomplete="off" id="chatInput"/>
-      <button class="send-btn" type="submit" title="Send">
-        <i class="fa-solid fa-paper-plane"></i>
-      </button>
-    </form>
+    <div class="row g-4 mt-2">
+      <div class="col-lg-12" data-aos="zoom-in">
+        <div class="card p-4">
+          <h5 class="section-title"><i class="fa-solid fa-gears"></i> Languages & Technologies Used</h5>
+          <ul>
+            <li><strong>Frontend:</strong> HTML, CSS, JavaScript, Bootstrap, React</li>
+            <li><strong>Backend:</strong> Node.js, Express.js, (Optional PHP)</li>
+            <li><strong>Database:</strong> MongoDB, MySQL (optional)</li>
+            <li><strong>File Storage:</strong> Google Drive API</li>
+            <li><strong>Other Tools:</strong> Multer, Razorpay API (future integration)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mt-2">
+      <div class="col-lg-12" data-aos="fade-up">
+        <div class="card p-4">
+          <h5 class="section-title"><i class="fa-solid fa-bullseye"></i> Purpose</h5>
+          <p>
+            BlinkNotes is used to help students access study notes anytime, anywhere. It promotes collaboration 
+            and knowledge sharing, reduces duplication of effort, and serves as a digital library for academic resources.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- FOOTER -->
   <footer class="footer">
@@ -346,8 +330,8 @@
         <div class="footer-links col-md-2 mb-4">
           <div class="footer-title"><i class="fa-solid fa-link"></i> Quick Links</div>
           <a href="upload.html"><i class="fas fa-upload"></i> Upload Notes</a>
-          <a href="browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
-          <a href="index.html"><i class="fas fa-trophy"></i> Leaderboard</a>
+          <a href="Browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
+          <a href="b.html"><i class="fas fa-trophy"></i> Leaderboard</a>
           <a href="#"><i class="fas fa-question-circle"></i> Help & FAQ</a>
           <a href="#"><i class="fas fa-code"></i> API Docs</a>
           <a href="chat.html"><i class="fas fa-mobile-alt"></i> Mobile App</a>
@@ -374,50 +358,11 @@
       <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
     </div>
   </footer>
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap JS & AOS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
-    const form = document.getElementById('chatForm');
-    const input = document.getElementById('chatInput');
-    const chatBody = document.getElementById('chatBody');
-
-    form.onsubmit = async function(e) {
-      e.preventDefault();
-      const msg = input.value.trim();
-      if (!msg) return;
-      addMessage(msg, 'user');
-      input.value = '';
-      await getBotResponse(msg);
-    };
-
-    function addMessage(msg, type) {
-      const div = document.createElement('div');
-      div.className = "bubble " + type;
-      div.textContent = msg;
-      chatBody.appendChild(div);
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    async function getBotResponse(userInput) {
-      addMessage("Typing...", 'bot');
-      try {
-        const response = await fetch(`${window.env.API_URL}/chat/gpt`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: userInput })
-        });
-        const data = await response.json();
-        document.querySelector('.bubble.bot:last-child').remove();
-        addMessage(data.reply.trim(), 'bot');
-      } catch (err) {
-        document.querySelector('.bubble.bot:last-child').remove();
-        addMessage("Error: Could not connect to AI.", 'bot');
-      }
-    }
-
-    document.querySelector('.clear-btn').onclick = function() {
-      chatBody.innerHTML = '';
-    };
+    AOS.init({ duration: 800, offset: 100 });
   </script>
 </body>
 </html>

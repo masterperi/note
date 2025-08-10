@@ -4,43 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up - BlinkNotes</title>
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:400,700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Shared Navbar/Footer Styles -->
+  <link rel="stylesheet" href="navbar-footer.css">
   <style>
-    /* Inline styles for simplicity */
-    :root {
-      --main-bg: #d9d9d9;
-      --card-bg: #fff;
-      --btn-bg: #000;
-      --btn-radius: 15px;
-      --input-bg: #fff;
-      --input-radius: 15px;
-      --input-border: #e1e1e1;
-      --divider: #222;
-      --google-btn: #EEEEEE;
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      background: var(--main-bg);
+    body {
+      background: #6c47ff;
       font-family: 'Inter', Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .signup-card {
-      background: var(--card-bg);
+      background: #fff;
       border-radius: 22px;
-      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.09);
-      padding: 40px 38px;
-      width: 435px;
-      max-width: 97vw;
+      box-shadow: 0 8px 32px rgba(108,71,255,0.14);
+      padding: 42px 36px;
+      width: 410px;
+      max-width: 98vw;
+      margin: 90px auto 30px auto;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -50,51 +32,139 @@
       align-items: flex-end;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 2px;
+      margin-bottom: 6px;
     }
     .main-title {
-      font-size: 2.7rem;
+      font-size: 2.1rem;
       font-weight: 800;
-      color: #111;
+      color: #6c47ff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .beta-badge {
       padding: 6px 24px;
       border-radius: 25px;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 1.3rem;
+      background: #ffd500;
+      color: #6c47ff;
+      font-size: 1.1rem;
+      font-weight: 700;
     }
     .form-head {
-      font-size: 2rem;
+      font-size: 1.7rem;
       font-weight: 600;
-      color: #222;
+      color: #6c47ff;
       text-align: center;
       margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
     }
     .form-desc {
-      font-size: 1.2rem;
-      color: rgba(0, 0, 0, 0.6);
+      font-size: 1.15rem;
+      color: #444;
       text-align: center;
       margin-bottom: 20px;
-    }
-    form {
-      width: 100%;
       display: flex;
-      flex-direction: column;
-      gap: 18px;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+        :root {
+      --brand-bg: #6c47ff;
+      --brand-text: #fff;
+      --accent: #ffd500;
+    }
+    body {
+      background: #f7f7fa;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #222;
+    }
+    .navbar, .footer {
+      background: var(--brand-bg) !important;
+      color: var(--brand-text) !important;
+    }
+    .feature-card {
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(100,110,120,0.10);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      background: #fff;
+      margin-bottom: 14px;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(108,71,255,0.15);
+    }
+    .footer {
+      padding: 40px 0 20px 0;
+      margin-top: 40px;
+    }
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--brand-text);
+      display: flex;
+      align-items: center;
+    }
+    .footer-title {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .footer-links a {
+      color: var(--brand-text);
+      text-decoration: none;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .footer-links a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .footer-bottom {
+      text-align: center;
+      color: var(--brand-text);
+      font-size: 1rem;
+      margin-top: 20px;
+    }
+    .social-icons i {
+      font-size: 22px;
+      margin-right: 15px;
+      color: var(--brand-text);
+      transition: color 0.23s;
+    }
+    .social-icons i:hover {
+      color: var(--accent);
+    }
+    @media (max-width: 900px) {
+      .footer-content { flex-direction: column; gap: 20px; }
+      .navbar .navbar-brand { font-size: 1.5rem; }
     }
     .input-holder {
       display: flex;
       align-items: center;
-      background: var(--input-bg);
-      border: 1.6px solid var(--input-border);
-      border-radius: var(--input-radius);
+      background: #f7f7fa;
+      border: 1.6px solid #e1e1e1;
+      border-radius: 15px;
       padding: 6px 14px;
       height: 49px;
+      margin-bottom: 12px;
+      width: 100%;
     }
     .input-holder i {
       color: #a8a8a8;
       margin-right: 13px;
+      font-size: 1.1rem;
     }
     .input-holder input {
       border: none;
@@ -105,10 +175,10 @@
     }
     .signup-btn {
       width: 100%;
-      background: var(--btn-bg);
+      background: #6c47ff;
       color: #fff;
       border: none;
-      border-radius: var(--btn-radius);
+      border-radius: 15px;
       height: 49px;
       font-size: 1.16rem;
       cursor: pointer;
@@ -116,30 +186,67 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+      transition: background 0.13s;
+      font-weight: 600;
     }
     .signup-btn:hover {
-      background: #222;
+      background: #4b2fd6;
     }
     .terms-text {
-      font-size: 0.9rem;
+      font-size: 0.96rem;
       color: #828282;
       text-align: center;
       margin-top: 20px;
     }
     .terms-text a {
-      color: #222;
+      color: #6c47ff;
       text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      .signup-card {
+        padding: 18px 8px;
+        width: 98vw;
+        margin: 40px auto 12px auto;
+      }
+      .form-head, .form-desc {
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark py-2">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <i class="fa-solid fa-book-open-reader me-2"></i> BlinkNotes <span class="beta ms-2">Beta</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="Browse.html"><i class="fa-solid fa-book"></i> Browse Notes</a></li>
+          <li class="nav-item"><a class="nav-link" href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+          <li class="nav-item"><a class="nav-link" href="b.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="aboutus.html"><i class="fa-solid fa-users"></i> About Us</a></li>
+        </ul>
+        <div class="d-flex ms-lg-4 gap-2">
+          <a href="chat.html" class="btn btn-outline-light"><i class="fa-solid fa-robot"></i> AI Helper</a>
+          <a href="login.html" class="btn btn-primary"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+          <a href="signup.html" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!-- SIGNUP CARD -->
   <div class="signup-card">
     <div class="brand-row">
-      <span class="main-title">BlinkNotes</span>
+      <span class="main-title"><i class="fa-solid fa-book-open-reader"></i> BlinkNotes</span>
       <span class="beta-badge">Beta</span>
     </div>
-    <div class="form-head">Create an Account</div>
-    <div class="form-desc">Enter your email to sign up for this app</div>
+    <div class="form-head"> Create an Account</div>
     <form id="signup-form" autocomplete="on">
       <div class="input-holder">
         <i class="fa-regular fa-envelope"></i>
@@ -158,23 +265,67 @@
       By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
     </div>
   </div>
-<script src="config.js"></script>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content row">
+        <div class="footer-brand col-md-4 mb-4">
+          <div class="footer-logo d-flex align-items-center"><i class="fa-solid fa-book-open-reader me-2"></i> BlinkNotes <span class="beta ms-2">Beta</span></div>
+          <div class="footer-desc mt-2">
+              Empowering students worldwide through collaborative learning.<br>
+              Share knowledge, discover insights, and excel together with our AI-powered notes sharing platform.
+          </div>
+          <div class="social-icons mt-3">
+              <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links col-md-2 mb-4">
+          <div class="footer-title"><i class="fa-solid fa-link"></i> Quick Links</div>
+          <a href="upload.html"><i class="fas fa-upload"></i> Upload Notes</a>
+          <a href="Browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
+          <a href="b.html"><i class="fas fa-trophy"></i> Leaderboard</a>
+          <a href="#"><i class="fas fa-question-circle"></i> Help & FAQ</a>
+          <a href="#"><i class="fas fa-code"></i> API Docs</a>
+          <a href="chat.html"><i class="fas fa-mobile-alt"></i> Mobile App</a>
+        </div>
+        <div class="footer-links col-md-2 mb-4">
+          <div class="footer-title"><i class="fa-solid fa-graduation-cap"></i> Popular Subjects</div>
+          <a href="#"><i class="fas fa-square-root-alt"></i> Mathematics</a>
+          <a href="#"><i class="fas fa-laptop-code"></i> Computer Science</a>
+          <a href="#"><i class="fas fa-atom"></i> Physics</a>
+          <a href="#"><i class="fas fa-flask"></i> Chemistry</a>
+          <a href="#"><i class="fas fa-leaf"></i> Biology</a>
+          <a href="#"><i class="fas fa-chart-line"></i> Economics</a>
+        </div>
+        <div class="footer-links col-md-3 mb-4">
+          <div class="footer-title"><i class="fa-solid fa-gavel"></i> Legal & Support</div>
+          <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+          <a href="#"><i class="fas fa-user-secret"></i> Privacy Policy</a>
+          <a href="#"><i class="fas fa-balance-scale"></i> Copyright Policy</a>
+          <a href="#"><i class="fas fa-book-reader"></i> Academic Integrity</a>
+          <a href="#" class="download-chapter"><i class="fas fa-download"></i> Download Free Chapter</a>
+        </div>
+      </div>
+      <hr style="margin: 20px 0; background: #fff;" />
+      <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
+    </div>
+  </footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.getElementById('signup-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-
       try {
         const response = await fetch(`${window.env.API_URL}/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
         });
-
         const data = await response.json();
-
         if (response.ok) {
           alert(data.message);
           window.location.href = 'login.html';

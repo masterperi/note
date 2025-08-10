@@ -1,50 +1,36 @@
+<!-- Similar navbar/footer, icons, Bootstrap, and card layout for login -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - BlinkNotes</title>
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:400,700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
   <style>
     :root {
-      --main-bg: #d9d9d9;
-      --card-bg: #fff;
-      --btn-bg: #000;
-      --btn-radius: 12px;
-      --input-radius: 12px;
-      --input-bg: #fff;
-      --input-border: #DFDFDF;
-      --divider: #444;
-      --google-btn: #EEEEEE;
-    }
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      --brand-bg: #6c47ff;
+      --brand-text: #fff;
+      --accent: #ffd500;
     }
     body {
-      min-height: 100vh;
-      background: var(--main-bg);
+      background: #f7f7fa;
       font-family: 'Inter', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    }
+    .navbar, .footer {
+      background: var(--brand-bg) !important;
+      color: var(--brand-text) !important;
     }
     .login-card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.09);
-      padding: 40px 36px;
-      width: 400px;
-      max-width: 95vw;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(108,71,255,0.14);
+      padding: 42px 36px;
+      width: 390px;
+      max-width: 97vw;
+      margin: 90px auto 30px auto;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -54,41 +40,37 @@
       align-items: flex-end;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     .main-title {
-      font-size: 2.8rem;
+      font-size: 2.1rem;
       font-weight: 800;
-      color: #111;
+      
+      color: #6c47ff;
     }
     .beta-badge {
       padding: 6px 24px;
       border-radius: 25px;
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      font-size: 1.2rem;
+      background: var(--accent);
+      color: var(--brand-bg);
+      font-size: 1.1rem;
     }
     .form-title {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 600;
-      color: #222;
-      margin-bottom: 26px;
+      color: var(--brand-bg);
+      margin-bottom: 22px;
       text-align: center;
-    }
-    form {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
     }
     .input-holder {
       display: flex;
       align-items: center;
-      background: var(--input-bg);
-      border: 1.6px solid var(--input-border);
-      border-radius: var(--input-radius);
+      background: #f7f7fa;
+      border: 1.6px solid #e1e1e1;
+      border-radius: 15px;
       padding: 6px 14px;
       height: 48px;
+      margin-bottom: 12px;
     }
     .input-holder i {
       color: #a8a8a8;
@@ -99,44 +81,72 @@
       outline: none;
       background: transparent;
       flex: 1;
-      font-size: 1.15rem;
+      font-size: 1.12rem;
     }
     .login-btn {
       width: 100%;
-      background: var(--btn-bg);
+      background: var(--brand-bg);
       color: #fff;
       border: none;
-      border-radius: var(--btn-radius);
+      border-radius: 15px;
       height: 48px;
-      font-size: 1.15rem;
+      font-size: 1.13rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+      transition: background 0.13s;
     }
     .login-btn:hover {
-      background: #333;
+      background: #4b2fd6;
     }
     .signup-link {
       margin-top: 20px;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       color: #222;
       text-align: center;
     }
     .signup-link a {
-      color: #000;
+      color: var(--brand-bg);
       text-decoration: underline;
     }
   </style>
 </head>
 <body>
+  <!-- NAVBAR -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark py-2">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <i class="fa-solid fa-book-open-reader me-2"></i> BlinkNotes <span class="beta ms-2">Beta</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="Browse.html"><i class="fa-solid fa-book"></i> Browse Notes</a></li>
+          <li class="nav-item"><a class="nav-link active" href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html"><i class="fa-solid fa-users"></i> About Us</a></li>
+        </ul>
+        <div class="d-flex ms-lg-4 gap-2">
+          <a href="chat.html" class="btn btn-outline-light"><i class="fa-solid fa-robot"></i> AI Helper</a>
+          <a href="login.html" class="btn btn-primary"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+          <a href="signup.html" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+      </div>
+    </div>
+  </nav>
   <div class="login-card">
+    
     <div class="logo-row">
-      <span class="main-title">BlinkNotes</span>
+      <span class="main-title"><i class="fa-solid fa-book-open-reader"></i> BlinkNotes</span>
       <span class="beta-badge">Beta</span>
     </div>
-    <div class="form-title">Login</div>
+    <div class="form-title"><i class="fa-solid fa-sign-in-alt"></i> Login</div>
     <form id="login-form" autocomplete="on">
       <div class="input-holder">
         <i class="fa-regular fa-envelope"></i>
@@ -155,36 +165,78 @@
       Don't have an account? <a href="signup.html">Sign up</a>
     </div>
   </div>
-
-<script src="config.js"></script>
-<script>
-  document.getElementById('login-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    try {
-      const response = await fetch(`${window.env.API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Login successful!');
-        window.location.href = 'index.html';
-      } else {
-        alert(data.error || 'Login failed');
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content row">
+        <div class="footer-brand col-md-4 mb-4">
+          <div class="footer-logo d-flex align-items-center"><i class="fa-solid fa-book-open-reader me-2"></i> BlinkNotes <span class="beta ms-2">Beta</span></div>
+          <div class="footer-desc mt-2">
+              Empowering students worldwide through collaborative learning.<br>
+              Share knowledge, discover insights, and excel together with our AI-powered notes sharing platform.
+          </div>
+          <div class="social-icons mt-3">
+              <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+              <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links col-md-2 mb-4">
+          <div class="footer-title"><i class="fa-solid fa-link"></i> Quick Links</div>
+          <a href="upload.html"><i class="fas fa-upload"></i> Upload Notes</a>
+          <a href="Browse.html"><i class="fas fa-book-open"></i> Browse Notes</a>
+          <a href="b.html"><i class="fas fa-trophy"></i> Leaderboard</a>
+          <a href="#"><i class="fas fa-question-circle"></i> Help & FAQ</a>
+          <a href="#"><i class="fas fa-code"></i> API Docs</a>
+          <a href="chat.html"><i class="fas fa-mobile-alt"></i> Mobile App</a>
+        </div>
+        <div class="footer-links col-md-2 mb-4">
+          <div class="footer-title"><i class="fa-solid fa-graduation-cap"></i> Popular Subjects</div>
+          <a href="#"><i class="fas fa-square-root-alt"></i> Mathematics</a>
+          <a href="#"><i class="fas fa-laptop-code"></i> Computer Science</a>
+          <a href="#"><i class="fas fa-atom"></i> Physics</a>
+          <a href="#"><i class="fas fa-flask"></i> Chemistry</a>
+          <a href="#"><i class="fas fa-leaf"></i> Biology</a>
+          <a href="#"><i class="fas fa-chart-line"></i> Economics</a>
+        </div>
+        <div class="footer-links col-md-3 mb-4">
+          <div class="footer-title"><i class="fa-solid fa-gavel"></i> Legal & Support</div>
+          <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+          <a href="#"><i class="fas fa-user-secret"></i> Privacy Policy</a>
+          <a href="#"><i class="fas fa-balance-scale"></i> Copyright Policy</a>
+          <a href="#"><i class="fas fa-book-reader"></i> Academic Integrity</a>
+          <a href="#" class="download-chapter"><i class="fas fa-download"></i> Download Free Chapter</a>
+        </div>
+      </div>
+      <hr style="margin: 20px 0; background: var(--brand-text);" />
+      <div class="footer-bottom">&copy; 2025 BlinkNotes. All rights reserved.</div>
+    </div>
+  </footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      try {
+        const response = await fetch(`${window.env.API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert('Login successful!');
+          window.location.href = 'index.html';
+        } else {
+          alert(data.error || 'Login failed');
+        }
+      } catch (error) {
+        alert('An error occurred. Please try again later.');
+        console.error(error);
       }
-    } catch (error) {
-      alert('An error occurred. Please try again later.');
-      console.error(error);
-    }
-  });
-</script>
-
+    });
+  </script>
 </body>
 </html>
