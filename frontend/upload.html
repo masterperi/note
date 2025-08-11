@@ -395,13 +395,13 @@
   <script>
     // Example: Implement your upload logic here!
   </script>
-  <script>
+<script>
 document.getElementById("uploadForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
 
   try {
-    const res = await fetch("http://localhost:3000/upload", {
+    const res = await fetch(`${window.env.API_URL}/upload`, {
       method: "POST",
       body: formData
     });

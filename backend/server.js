@@ -9,15 +9,14 @@ const path = require('path');
 
 // ===== IMPORT ROUTES =====
 const authRoutes = require('./routes/auth');
-const chatbotRoutes = require('./routes/chatbot'); // <-- Chatbot route
+const chatbotRoutes = require('./routes/chatbot');
 
-// ===== CREATE APP =====
 const app = express();
 
 // ===== MIDDLEWARE =====
 app.use(cors({ origin: '*' }));
-app.use(express.json()); // For JSON bodies
-app.use(express.urlencoded({ extended: true })); // For form data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ===== MONGODB CONNECTION =====
 mongoose.connect(process.env.MONGODB_URI, {
@@ -43,69 +42,17 @@ const SubjectSchema = new mongoose.Schema({
   downloads: { type: Number, default: 0 }
 }, { timestamps: true });
 
-
-// ===== GET ALL FILES WITH FILTERS & SORTING =====
-app.get('/files', async (req, res) => {
-  try {
-    let { sort, subject, semester, tags } = req.query;
-
-    let query = {};
-
-    // Filtering
-    if (subject) {
-      query["subjectCode"] = { $regex: subject, $options: "i" };
-    }
-    if (semester) {
-      query["semester"] = semester;
-    }
-    if (tags) {
-      const tagArray = tags.split(',').map(t => t.trim());
-      query["tags"] = { $in: tagArray };
-    }
-
-    let sortOption = {};
-    if (sort === "newest") {
-      sortOption = { createdAt: -1 }; // newest first
-    } else if (sort === "most_downloads") {
-      sortOption = { downloads: -1 };
-    }
-
-    // Find documents
-    const subjects = await Subject.find(query).sort(sortOption);
-
-    const files = subjects.map(subject => ({
-      id: subject._id,
-      fileName: subject.file.fileName,
-      contentType: subject.file.contentType,
-      subjectCode: subject.subjectCode,
-      semester: subject.semester,
-      tags: subject.tags,
-      description: subject.description,
-      uploadDate: subject.createdAt,
-      downloads: subject.downloads || 0
-    }));
-
-    res.json(files);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "❌ Error fetching files" });
-  }
-});
-
-
-// ===== SUBJECT MODEL =====
-
 const Subject = mongoose.model('Subject', SubjectSchema);
 
 // ===== MULTER MEMORY STORAGE =====
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 // ===== ROUTES =====
-app.use('/auth', authRoutes);      // Auth routes
-app.use('/chat', chatbotRoutes);   // Chatbot routes
+app.use('/auth', authRoutes);
+app.use('/chat', chatbotRoutes);
 
-// ===== FILE UPLOAD =====
+// ===== UPLOAD FILE =====
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
     const { userID, subjectCode, subjectTitle, tags, semester, description } = req.body;
@@ -126,58 +73,51 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     });
 
     await newSubject.save();
-    res.json({ message: '✅ PDF uploaded and stored in MongoDB successfully', id: newSubject._id });
+    res.json({ message: '✅ File uploaded successfully', id: newSubject._id });
   } catch (err) {
     res.status(500).json({ message: '❌ Upload failed', error: err.message });
   }
 });
 
-
-// ===== GET SINGLE FILE =====
-// ===== PREVIEW FILE (No Counter) =====
+// ===== GET FILES WITH FILTERS & SORTING =====
 app.get('/files', async (req, res) => {
   try {
-    let filter = {};
+    let { sort, subject, semester, tags } = req.query;
+    let query = {};
 
-    if (req.query.subject) {
-      filter.$or = [
-        { subjectCode: { $regex: req.query.subject, $options: 'i' } },
-        { title: { $regex: req.query.subject, $options: 'i' } }
-      ];
-    }
+    if (subject) query.subjectCode = { $regex: subject, $options: 'i' };
+    if (semester) query.semester = semester;
+    if (tags) query.tags = { $in: tags.split(',').map(t => t.trim()) };
 
-    if (req.query.semester) {
-      filter.semester = req.query.semester;
-    }
+    let sortOption = {};
+    if (sort === "newest") sortOption = { createdAt: -1 };
+    else if (sort === "most_downloads") sortOption = { downloads: -1 };
 
-    if (req.query.tags) {
-      const tagsArray = req.query.tags.split(',').map(t => t.trim());
-      filter.tags = { $in: tagsArray };
-    }
+    const subjects = await Subject.find(query).sort(sortOption);
+    const files = subjects.map(s => ({
+      id: s._id,
+      title: s.subjectTitle,
+      subject: s.subjectCode,
+      description: s.description,
+      uploader: s.userID,
+      fileName: s.file.fileName,
+      contentType: s.file.contentType,
+      uploadDate: s.createdAt,
+      downloads: s.downloads
+    }));
 
-    let query = FileModel.find(filter);
-
-    if (req.query.sort === 'newest') {
-      query = query.sort({ uploadDate: -1 });
-    } else if (req.query.sort === 'most_downloads') {
-      query = query.sort({ downloads: -1 });
-    }
-
-    const files = await query.exec();
     res.json(files);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "❌ Error fetching files" });
   }
 });
 
-
-
-// ===== DOWNLOAD FILE (With Counter) =====
+// ===== DOWNLOAD FILE & INCREMENT COUNTER =====
 app.get('/download/:id', async (req, res) => {
   try {
     const subject = await Subject.findByIdAndUpdate(
       req.params.id,
-      { $inc: { downloads: 1 } }, // increment downloads
+      { $inc: { downloads: 1 } },
       { new: true }
     );
 
@@ -191,29 +131,6 @@ app.get('/download/:id', async (req, res) => {
     res.send(subject.file.data);
   } catch (err) {
     res.status(500).send("❌ Error downloading file");
-  }
-});
-
-
-// ===== GET ALL FILES =====
-app.get('/files', async (req, res) => {
-  try {
-    const subjects = await Subject.find();
-    const files = subjects.map(subject => ({
-      id: subject._id,
-      title: subject.subjectTitle,
-      subject: subject.subjectCode,
-      description: subject.description,
-      uploader: subject.userID,
-      fileName: subject.file.fileName,
-      contentType: subject.file.contentType,
-      uploadDate: subject.createdAt || subject._id.getTimestamp(),
-      downloads: subject.downloads || 0,
-      rating: subject.rating || 5
-    }));
-    res.json(files);
-  } catch (err) {
-    res.status(500).json({ message: "❌ Error fetching files" });
   }
 });
 

@@ -468,101 +468,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="config.js"></script>
   
-  <!-- Scripts -->
-  <script>
-    const API_URL = 'http://localhost:3000'; // change if backend on other host
+<script>
+    const API_URL = window.env.API_URL; // from config.js
 
-    async function loadAllPDFs({ sort='', subject='', semester='', tags='' } = {}) {
-      const container = document.getElementById('pdfContainer');
-      const emptyMessage = document.getElementById('emptyMessage');
-      container.innerHTML = '<div class="col-12 text-center my-4">Loading…</div>';
-      emptyMessage.style.display = 'none';
-
-      try {
-        const params = new URLSearchParams();
-        if (sort) params.set('sort', sort);
-        if (subject) params.set('subject', subject);
-        if (semester) params.set('semester', semester);
-        if (tags) params.set('tags', tags);
-
-        const url = `${API_URL}/files${params.toString() ? '?' + params.toString() : ''}`;
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
-        const files = await res.json();
-
-        if (!Array.isArray(files) || files.length === 0) {
-          container.innerHTML = '';
-          emptyMessage.style.display = 'block';
-          return;
-        }
-
-        container.innerHTML = '';
-        files.forEach(file => {
-          const imgSrc = file.coverImage || 'img/pdf_cover.jpg';
-          const uploadDate = file.uploadDate || file.createdAt || file.created_at;
-          const dateStr = uploadDate ? new Date(uploadDate).toLocaleDateString() : '';
-          const title = file.title || file.fileName || 'Untitled';
-          const subjectCode = file.subjectCode || file.subject || 'N/A';
-          const desc = file.description || '';
-          const downloads = file.downloads ?? 0;
-          const id = file.id || file._id;
-
-          const col = document.createElement('div');
-          col.className = 'col-md-4';
-          col.innerHTML = `
-            <div class="feature-card card h-100 text-center p-3">
-              <img src="${imgSrc}" alt="cover" style="width:100%;height:120px;">
-              <div class="feature-title fw-bold mt-2">${escapeHtml(title)}</div>
-              <div class="badge bg-secondary my-2">${escapeHtml(subjectCode)}</div>
-              <p class="small text-truncate" style="height:42px;overflow:hidden;">${escapeHtml(desc)}</p>
-              <div style="font-size:13px;color:#666;">
-                <i class="fa-solid fa-download"></i> ${downloads} downloads &nbsp; • &nbsp;
-                <i class="fa-solid fa-calendar"></i> ${dateStr}
-              </div>
-              <div class="d-flex justify-content-center gap-2 mt-3">
-                <button class="btn btn-outline-primary btn-sm" onclick="preview('${id}')"><i class="fas fa-file-alt"></i> Preview</button>
-                <a class="btn btn-primary btn-sm" href="${API_URL}/download/${id}" rel="noopener"><i class="fas fa-download"></i> Download</a>
-              </div>
-            </div>
-          `;
-          container.appendChild(col);
-        });
-
-      } catch (err) {
-        container.innerHTML = `<div class="col-12 text-danger text-center">Error loading PDFs: ${escapeHtml(err.message)}</div>`;
-        console.error('loadAllPDFs error', err);
-      }
-    }
-
-    // helper to open preview in new tab
-    function preview(id) {
-      window.open(`${API_URL}/file/${id}`, '_blank', 'noopener');
-    }
-
-    function applyFilters() {
-      const subject = document.getElementById('searchSubject').value.trim();
-      const semester = document.getElementById('semesterFilter').value;
-      const tags = document.getElementById('tagFilter').value.trim();
-      const sort = document.getElementById('sortFilter').value;
-      loadAllPDFs({ sort, subject, semester, tags });
-    }
-
-    // attach button
-    document.getElementById('applyBtn').addEventListener('click', applyFilters);
-
-    // basic HTML escape (small helper)
-    function escapeHtml(str) {
-      if (!str && str !== 0) return '';
-      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-    }
-
-    // initial load
-    window.addEventListener('load', () => loadAllPDFs());
-  </script>
-
-
-
-  <script>
     async function loadPDF() {
       const docId = document.getElementById('docId').value.trim();
       const viewer = document.getElementById('pdfViewer');
@@ -572,7 +480,7 @@
         return;
       }
       try {
-        const response = await fetch(`http://localhost:3000/file/${docId}`);
+        const response = await fetch(`${API_URL}/file/${docId}`);
         if (!response.ok) throw new Error('File not found');
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
@@ -583,11 +491,12 @@
         viewer.hidden = true;
       }
     }
+
     async function loadAllPDFs() {
       const container = document.getElementById('pdfContainer');
       container.innerHTML = '<p>Loading...</p>';
       try {
-        const listResponse = await fetch('http://localhost:3000/files');
+        const listResponse = await fetch(`${API_URL}/files`);
         const files = await listResponse.json();
         if (!files.length) {
           container.innerHTML = '<p>No PDFs found.</p>';
@@ -624,8 +533,8 @@
                   <i class="fa-solid fa-calendar"></i> ${dateStr}
                 </div>
                 <div style="margin-top:11px;display:flex;gap:8px;justify-content:center;">
-                  <a href="http://localhost:3000/file/${file.id}" class="btn btn-outline-primary" target="_blank"><i class="fas fa-file-alt"></i> Preview</a>
-                  <a href="http://localhost:3000/download/${file.id}" class="btn btn-primary"><i class="fas fa-download"></i> Download</a>
+                  <a href="${API_URL}/file/${file.id}" class="btn btn-outline-primary" target="_blank"><i class="fas fa-file-alt"></i> Preview</a>
+                  <a href="${API_URL}/download/${file.id}" class="btn btn-primary"><i class="fas fa-download"></i> Download</a>
                 </div>
               </div>
             </div>
@@ -635,7 +544,9 @@
         container.innerHTML = `<p class="text-danger fw-bold">Error loading PDFs: ${err.message}</p>`;
       }
     }
+
     window.onload = loadAllPDFs;
-  </script>
+</script>
+
 </body>
 </html>

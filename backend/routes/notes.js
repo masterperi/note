@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const Note = require('../models/Note');
 
+
 const router = express.Router();
 
 // GET all notes

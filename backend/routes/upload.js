@@ -1,11 +1,12 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const Note = require('../models/Note');
 
 const router = express.Router();
 
-// Set up multer storage
+// Multer storage config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => {
@@ -25,9 +26,8 @@ const upload = multer({
   }
 });
 
-// Route to handle uploads
+// Upload file + save metadata
 router.post('/', upload.single('file'), async (req, res) => {
-
   try {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded.' });
 
@@ -45,17 +45,14 @@ router.post('/', upload.single('file'), async (req, res) => {
     });
 
     await newNote.save();
-
     res.status(201).json({ message: '✅ File uploaded & metadata saved!', note: newNote });
   } catch (err) {
-    console.error('✅ File uploaded :', err);
+    console.error('Upload error:', err);
     res.status(500).json({ message: 'Upload failed', error: err.message });
   }
 });
 
-
-
-// Get all notes metadata
+// Get all notes
 router.get('/', async (req, res) => {
   try {
     const notes = await Note.find().sort({ createdAt: -1 });
@@ -65,16 +62,13 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Serve a file
-router.get('/file/:filename', async (req, res) => {
+// Serve file by filename
+router.get('/file/:filename', (req, res) => {
   const filePath = path.join(__dirname, '..', 'uploads', req.params.filename);
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) return res.status(404).json({ message: 'File not found' });
     res.sendFile(filePath);
   });
 });
-
-
-
 
 module.exports = router;
