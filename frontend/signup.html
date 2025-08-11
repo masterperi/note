@@ -247,20 +247,33 @@
       <span class="beta-badge">Beta</span>
     </div>
     <div class="form-head"> Create an Account</div>
-    <form id="signup-form" autocomplete="on">
-      <div class="input-holder">
-        <i class="fa-regular fa-envelope"></i>
-        <input type="email" id="email" placeholder="Email" required>
-      </div>
-      <div class="input-holder">
-        <i class="fa-solid fa-lock"></i>
-        <input type="password" id="password" placeholder="Password" required>
-      </div>
-      <button class="signup-btn" type="submit">
-        <i class="fa-solid fa-user-plus"></i>
-        Sign Up
-      </button>
-    </form>
+<form id="signup-form" autocomplete="on">
+  <div class="input-holder">
+    <i class="fa-solid fa-user"></i>
+    <input type="text" id="name" placeholder="Full Name" required>
+  </div>
+  <div class="input-holder">
+    <i class="fa-solid fa-building-columns"></i>
+    <input type="text" id="college" placeholder="College Name" required>
+  </div>
+  <div class="input-holder">
+    <i class="fa-solid fa-phone"></i>
+    <input type="tel" id="phone" placeholder="Phone Number" required pattern="[0-9]{10}">
+  </div>
+  <div class="input-holder">
+    <i class="fa-regular fa-envelope"></i>
+    <input type="email" id="email" placeholder="Email" required>
+  </div>
+  <div class="input-holder">
+    <i class="fa-solid fa-lock"></i>
+    <input type="password" id="password" placeholder="Password" required>
+  </div>
+  <button class="signup-btn" type="submit">
+    <i class="fa-solid fa-user-plus"></i>
+    Sign Up
+  </button>
+</form>
+
     <div class="terms-text">
       By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
     </div>
@@ -315,28 +328,37 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('signup-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      try {
-        const response = await fetch(`${window.env.API_URL}/auth/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          alert(data.message);
-          window.location.href = 'login.html';
-        } else {
-          alert(data.error || 'Registration failed');
-        }
-      } catch (error) {
-        alert('An error occurred. Please try again later.');
-        console.error(error);
-      }
+    // Handle signup form submission
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const college = document.getElementById('college').value;
+  const phone = document.getElementById('phone').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const response = await fetch(`${window.env.API_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, college, phone, email, password }),
     });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+      window.location.href = 'login.html';
+    } else {
+      alert(data.error || 'Registration failed');
+    }
+  } catch (error) {
+    alert('An error occurred. Please try again later.');
+    console.error(error);
+  }
+});
+</script>
+  <script>
+    window.env = { API_URL: 'http://localhost:3000' }; // Set your API URL here
   </script>
 </body>
 </html>

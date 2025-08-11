@@ -276,5 +276,23 @@
   <script>
     // Example: Implement your upload logic here!
   </script>
+  <script>
+document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  try {
+    const res = await fetch("http://localhost:3000/upload", {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+    alert(data.message);
+  } catch (err) {
+    alert("Upload failed: " + err.message);
+  }
+});
+</script>
+
 </body>
 </html>
