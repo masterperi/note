@@ -16,6 +16,125 @@
       --brand-text: #fff;
       --accent: #ffd500;
     }
+    /* Navbar background and text color */
+.navbar {
+  background: #6c47ff !important;
+  color: #fff !important;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 1.15rem;
+  box-shadow: 0 2px 16px rgba(108, 71, 255, 0.10);
+}
+
+/* Navbar brand (logo/title) 
+.navbar-brand {
+  font-weight: 800;
+  font-size: 2rem;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+}
+*/
+.navbar-brand .beta {
+  background: #ffd500;
+  color: #6c47ff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 2px 15px;
+  border-radius: 15px;
+  margin-left: 7px;
+}
+
+/* Navbar links */
+.navbar-nav .nav-link {
+  color: #fff !important;
+  font-weight: 500;
+  margin-right: 10px;
+  transition: color 0.17s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #ffd500 !important;
+  background: none !important;
+  text-decoration: underline;
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  background-color: #ffffff00;
+  border-radius: 3px;
+}
+
+/* Navbar buttons on right */
+.d-flex .btn,
+.navbar .btn {
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 13px;
+  padding: 8px 18px;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.btn-outline-light {
+  background: none;
+  color: #fff !important;
+  border: 2px solid #fff;
+  transition: background 0.12s, color 0.12s;
+}
+
+.btn-outline-light:hover {
+  background: #ffd500;
+  color: #6c47ff !important;
+  border-color: #ffd500;
+}
+
+.btn-primary {
+  background: #2589ff;
+  border: none;
+  color: #fff !important;
+  transition: background 0.12s;
+}
+
+.btn-primary:hover {
+  background: #ffd500;
+  color: #6c47ff !important;
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .navbar .navbar-brand {
+    font-size: 1.5rem;
+  }
+  .navbar-nav .nav-link {
+    font-size: 0.97rem;
+    margin-right: 0;
+  }
+  .d-flex .btn {
+    font-size: 0.97rem;
+    padding: 7px 10px;
+  }
+}
+
+/* Remove Bootstrap's navbar text shadow */
+.navbar-dark .navbar-brand, .navbar-dark .navbar-nav .nav-link {
+  text-shadow: none;
+}
+
+
+
     body {
       background-color: #f8f9fa;
       font-family: 'Inter', Arial, sans-serif;
@@ -248,10 +367,10 @@
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
-          <li class="nav-item "><a class="nav-link" href="Browse.html"><i class="fa-solid fa-book"></i> Browse Notes</a></li>
-          <li class="nav-item"><a class="nav-link" href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
-          <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="about.html"><i class="fa-solid fa-users"></i> About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="browse.html"><i class="fa-solid fa-book"></i> Browse Notes</a></li>
+          <li class="nav-item "><a class="nav-link " href="upload.html"><i class="fa-solid fa-upload"></i> Upload Notes</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a></li>
+          <li class="nav-item"><a class="nav-link active" href="about.html"><i class="fa-solid fa-users"></i> About Us</a></li>
         </ul>
         <div class="d-flex ms-lg-4 gap-2">
           <a href="chat.html" class="btn btn-outline-light"><i class="fa-solid fa-robot"></i> AI Helper</a>
